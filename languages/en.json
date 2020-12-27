@@ -1,6 +1,6 @@
 {
    "SFRPG":{
-      "MCredits":"MCredits",
+      "UPBs":"MCredits",
       "ShipSystems":{
          "BaseFrames":{
             "Race":"Racer",
@@ -26,24 +26,20 @@
             "Ultra":"Advanced 8 LY"
          },
          "ExpansionBaySystems":{
-            "Arclab":"Arcane laboratory",
-            "Cargo":"Cargo hold",
-            "Escape":"Escape pods",
-            "Guest":"Guest quarters",
-            "Hangar":"Hangar bay",
-            "Life":"Life boats",
-            "Med":"Medical bay",
-            "Pass":"Passenger seating",
-            "Pwrhouse":"Power core housing",
-            "Recg":"Recreation suite (gym)",
-            "Rect":"Recreation suite (trivid den)",
-            "Hac":"Recreation suite (HAC)",
-            "Science":"Science lab",
-            "Senv":"Sealed environment chamber",
-            "Shuttle":"Shuttle bay",
-            "Smuggler":"Smuggler compartment",
-            "Syth":"Synthesis bay",
-            "Tech":"Tech workshop"
+            "Med"     : "Medical bay",
+            "MedA"    : "Advanced medical bay",
+            "Hosp"    : "Hospital bay",
+            "Cargo"   : "Cargo hold",
+            "Fuel"    : "Fuel tank",
+            "Science" : "Science lab",
+            "Tech"    : "Tech workshop",
+            "GarageM" : "Garage (M)",
+            "GarageL" : "Garage (L)",
+            "HangarM" : "Hangar bay (M)",
+            "HangarL" : "Hangar bay (L)",
+            "Hydro1"  : "Hydroponics Mark I",
+            "Hydro2"  : "Hydroponics Mark II",
+            "Hydro3"  : "Hydroponics Mark III"
          },
          "PowerCoreSystems":{
             "SH1"  : "Shuttle Mark I",

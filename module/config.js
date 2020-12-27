@@ -1,12 +1,8 @@
+import { SFRPG } from "../../../systems/sfrpg/module/config.js";
 /**
  * The set of ability scores used with the system
  * @type {Object}
  */
-
-SFRPG.currencies = {
-    "credit": "SFRPG.Credits",
-    "upb": "SFRPG.MCredits"
-};
 
 /*--------------------------------*
  * Starship properties and values *
@@ -135,24 +131,20 @@ SFRPG.thrustersMap = {
 };
 
 SFRPG.expansionBaySystems = {
-    "arclab"  : "SFRPG.ShipSystems.ExpansionBaySystems.Arclab",
-    "cargo"   : "SFRPG.ShipSystems.ExpansionBaySystems.Cargo",
-    "escape"  : "SFRPG.ShipSystems.ExpansionBaySystems.Escape",
-    "guest"   : "SFRPG.ShipSystems.ExpansionBaySystems.Guest",
-    "hangar"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hangar",
-    "life"    : "SFRPG.ShipSystems.ExpansionBaySystems.Life",
-    "med"     : "SFRPG.ShipSystems.ExpansionBaySystems.Med",
-    "pass"    : "SFRPG.ShipSystems.ExpansionBaySystems.Pass",
-    "pwrHouse": "SFRPG.ShipSystems.ExpansionBaySystems.Pwrhouse",
-    "recg"    : "SFRPG.ShipSystems.ExpansionBaySystems.Recg",
-    "rect"    : "SFRPG.ShipSystems.ExpansionBaySystems.Rect",
-    "hac"     : "SFRPG.ShipSystems.ExpansionBaySystems.Hac",
-    "science" : "SFRPG.ShipSystems.ExpansionBaySystems.Science",
-    "senv"    : "SFRPG.ShipSystems.ExpansionBaySystems.Senv",
-    "shuttle" : "SFRPG.ShipSystems.ExpansionBaySystems.Shuttle",
-    "smuggler": "SFRPG.ShipSystems.ExpansionBaySystems.Smuggler",
-    "syth"    : "SFRPG.ShipSystems.ExpansionBaySystems.Syth",
-    "tech"    : "SFRPG.ShipSystems.ExpansionBaySystems.Tech"
+    "Med"     : "SFRPG.ShipSystems.ExpansionBaySystems.Med",
+    "MedA"    : "SFRPG.ShipSystems.ExpansionBaySystems.MedA",
+    "Hosp"    : "SFRPG.ShipSystems.ExpansionBaySystems.Hosp",
+    "Cargo"   : "SFRPG.ShipSystems.ExpansionBaySystems.Cargo",
+    "Fuel"    : "SFRPG.ShipSystems.ExpansionBaySystems.Fuel",
+    "Science" : "SFRPG.ShipSystems.ExpansionBaySystems.Science",
+    "Tech"    : "SFRPG.ShipSystems.ExpansionBaySystems.Tech",
+    "GarageM" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageM",
+    "GarageL" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageL",
+    "HangarM" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarM",
+    "HangarL" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarL",
+    "Hydro1"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro1",
+    "Hydro2"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro2",
+    "Hydro3"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro3",
 };
 
 SFRPG.driftEngineMap = {
