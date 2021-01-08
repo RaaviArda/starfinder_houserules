@@ -5,13 +5,13 @@
 			<input type="text" name="data.attributes.highModules" value="{{data.attributes.highModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
 		<div class="item-name flexrow">High</div>
-		<div class="item-detail desc flexrow">
-			Description
+		<div class="shipmod-desc flexrow">
+			<p>Description</p>
 		</div>
-		<div class="item-detail desc flexrow">
-			PCU
+		<div class="shipmod-short flexrow">
+			<p>PCU</p>
 		</div>
-		<div class="item-controls flexrow">
+		<div class="shipmod-short flexrow">
 			<a class="item-control item-create highmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
 		</div>
     </li>
@@ -20,15 +20,15 @@
         {{#if (eq module.slot 1)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				{{module.name}}
+				<p>{{module.name}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.description}}
+			  <div class="shipmod-desc">
+				<p>{{module.description}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.pcu}}
+			  <div class="shipmod-short">
+				<p>{{module.pcu}}</p>
 			  </div>
-			  <div class="item-controls">
+			  <div class="shipmod-short">
 				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
 			  </div>
 			</li>
@@ -41,13 +41,13 @@
 			<input type="text" name="data.attributes.midModules" value="{{data.attributes.midModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
 		<div class="item-name flexrow">Mid</div>
-		<div class="item-detail desc flexrow">
-			Description
+		<div class="shipmod-desc flexrow">
+			<p>Description</p>
 		</div>
-		<div class="item-detail desc flexrow">
-			PCU
+		<div class="shipmod-short flexrow">
+			<p>PCU</p>
 		</div>
-		<div class="item-controls flexrow">
+		<div class="shipmod-short flexrow">
 			<a class="item-control item-create midmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
 		</div>
     </li>
@@ -56,15 +56,15 @@
         {{#if (eq module.slot 2)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				{{module.name}}
+				<p>{{module.name}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.description}}
+			  <div class="shipmod-desc">
+				<p>{{module.description}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.pcu}}
+			  <div class="shipmod-short">
+				<p>{{module.pcu}}</p>
 			  </div>
-			  <div class="item-controls">
+			  <div class="shipmod-short">
 				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
 			  </div>
 			</li>
@@ -77,13 +77,13 @@
 			<input type="text" name="data.attributes.lowModules" value="{{data.attributes.lowModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
 		<div class="item-name flexrow">Low</div>
-		<div class="item-detail desc flexrow">
-			Description
+		<div class="shipmod-desc flexrow">
+			<p>Description</p>
 		</div>
-		<div class="item-detail desc flexrow">
-			PCU
+		<div class="shipmod-short flexrow">
+			<p>PCU</p>
 		</div>
-		<div class="item-controls flexrow">
+		<div class="shipmod-short flexrow">
 			<a class="item-control item-create lowmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
 		</div>
     </li>
@@ -92,15 +92,15 @@
         {{#if (eq module.slot 3)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				{{module.name}}
+				<p>{{module.name}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.description}}
+			  <div class="shipmod-desc">
+				<p>{{module.description}}</p>
 			  </div>
-			  <div class="item-detail desc">
-				{{module.pcu}}
+			  <div class="shipmod-short">
+				<p>{{module.pcu}}</p>
 			  </div>
-			  <div class="item-controls">
+			  <div class="shipmod-short">
 				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
 			  </div>
 			</li>

@@ -2,7 +2,7 @@
   "name": "FoundryVTT-starfinder-houserules-raavi",
   "title": "Starfinder Houserules Raavi",
   "description": "Houserules for Starfinder",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "minimumCoreVersion": "0.6.4",
   "compatibleCoreVersion": "0.7.9",
   "author": "Raavi#3926",
