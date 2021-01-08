@@ -37,6 +37,10 @@ async function addModulesTab(app, html, data) {
 		actor.data.data.attributes.lowModules = 0;
 	}
 
+	if (actor.data.data.attributes.intModules === undefined || actor.data.data.attributes.intModules === null) {
+		actor.data.data.attributes.intModules = 0;
+	}
+
     if (
       actor.data.flags["FoundryVTT-starfinder-houserules-raavi"] === undefined ||
       actor.data.flags["FoundryVTT-starfinder-houserules-raavi"] === null
@@ -64,6 +68,7 @@ async function addModulesTab(app, html, data) {
     modulesHTML.find(".highmodule-add").click(async (event) => { generateModuleOnClick(event, html, app, actor, 1); });
 	modulesHTML.find(".midmodule-add").click(async (event) => { generateModuleOnClick(event, html, app, actor, 2); });
 	modulesHTML.find(".lowmodule-add").click(async (event) => { generateModuleOnClick(event, html, app, actor, 3); });
+	modulesHTML.find(".intmodule-add").click(async (event) => { generateModuleOnClick(event, html, app, actor, 4); });
 
     modulesHTML.find(".module-delete").click(async (event) => {
       event.preventDefault();
