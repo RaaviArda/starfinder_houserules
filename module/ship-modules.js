@@ -51,6 +51,8 @@ async function addModulesTab(app, html, data) {
 
 	let flags = actor.getFlag("FoundryVTT-starfinder-houserules-raavi", "modList");
 
+	updatePCU(actor);
+
 	let sheet = html.find(".sheet-body");
 
 	let modulesTabHtml = $(
@@ -104,6 +106,7 @@ async function addModulesTab(app, html, data) {
 			flags.splice(moduleId, 1);
 			await actor.unsetFlag("FoundryVTT-starfinder-houserules-raavi", "modList");
 			await actor.setFlag("FoundryVTT-starfinder-houserules-raavi", "modList", flags);
+			updatePCU(actor);
           }
 		  fixActiveTab(app);
         },
@@ -167,6 +170,7 @@ async function addModule(actor, html, modSlot) {
     flags.push(module);
     await actor.unsetFlag("FoundryVTT-starfinder-houserules-raavi", "modList");
     await actor.setFlag("FoundryVTT-starfinder-houserules-raavi", "modList", flags);
+	updatePCU(actor);
 }
 
 async function compileModulesTab(modulesTabHtml, sheet) {
@@ -178,4 +182,17 @@ async function compileModulesTab(modulesTabHtml, sheet) {
 
 function fixActiveTab(app) {
 	app.activateModulesTab = true;
+}
+
+function updatePCU(actor) {
+	let flags = actor.getFlag("FoundryVTT-starfinder-houserules-raavi", "modList");
+
+	const thrusters = CONFIG.SFRPG.thrustersMap[actor.data.data.details.systems.thrusters] || { speed: 8, mode: 0, pcu: 0 };
+	const shieldPCU = CONFIG.SFRPG.shieldsPower[actor.data.data.details.systems.shields] || 0;
+
+	let totalPower = thrusters.pcu + shieldPCU;
+
+	flags.forEach(module => totalPower = totalPower + module.pcu);
+
+	actor.data.data.attributes.power.value = totalPower;
 }

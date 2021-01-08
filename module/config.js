@@ -106,28 +106,28 @@ SFRPG.thrusterSystems = {
 };
 
 SFRPG.thrustersMap = {
-    "TSH1"  : { speed: 10, mod: 0 },
-    "TSH2"  : { speed: 12, mod: 0 },
-    "TSH3"  : { speed: 14, mod: 1 },
-    "TFR1"  : { speed: 12, mod: 0 },
-    "TFR2"  : { speed: 14, mod: 0 },
-    "TFR3"  : { speed: 16, mod: 1 },
-    "TDE1"  : { speed: 10, mod: 0 },
-    "TDE2"  : { speed: 12, mod: 0 },
-    "TDE3"  : { speed: 14, mod: 1 },
-    "TCR1"  : { speed: 8,  mod: 0 },
-    "TCR2"  : { speed: 9,  mod: 1 },
-    "TCR3"  : { speed: 10, mod: 2 },
-    "TBC1"  : { speed: 7,  mod: 0 },
-    "TBC2"  : { speed: 8,  mod: 1 },
-    "TBC3"  : { speed: 9,  mod: 1 },
-    "TBS1"  : { speed: 6,  mod: 0 },
-    "TBS2"  : { speed: 7,  mod: 1 },
-    "TBS3"  : { speed: 8,  mod: 2 },
-    "TCAP1" : { speed: 5,  mod: 0 },
-    "TCAP2" : { speed: 6,  mod: 0 },
-    "TSCAP1": { speed: 4,  mod: 0 },
-    "TSCAP2": { speed: 5,  mod: 0 }
+    "TSH1"  : { speed: 10, mod: 0, pcu: 20 },
+    "TSH2"  : { speed: 12, mod: 0, pcu: 25 },
+    "TSH3"  : { speed: 14, mod: 1, pcu: 30 },
+    "TFR1"  : { speed: 12, mod: 0, pcu: 30 },
+    "TFR2"  : { speed: 14, mod: 0, pcu: 35 },
+    "TFR3"  : { speed: 16, mod: 1, pcu: 40 },
+    "TDE1"  : { speed: 10, mod: 0, pcu: 50 },
+    "TDE2"  : { speed: 12, mod: 0, pcu: 60 },
+    "TDE3"  : { speed: 14, mod: 1, pcu: 70 },
+    "TCR1"  : { speed: 8,  mod: 0, pcu: 70 },
+    "TCR2"  : { speed: 9,  mod: 1, pcu: 80 },
+    "TCR3"  : { speed: 10, mod: 2, pcu: 90 },
+    "TBC1"  : { speed: 7,  mod: 0, pcu: 100 },
+    "TBC2"  : { speed: 8,  mod: 1, pcu: 120 },
+    "TBC3"  : { speed: 9,  mod: 1, pcu: 140 },
+    "TBS1"  : { speed: 6,  mod: 0, pcu: 140 },
+    "TBS2"  : { speed: 7,  mod: 1, pcu: 160 },
+    "TBS3"  : { speed: 8,  mod: 2, pcu: 180 },
+    "TCAP1" : { speed: 5,  mod: 0, pcu: 220 },
+    "TCAP2" : { speed: 6,  mod: 0, pcu: 250 },
+    "TSCAP1": { speed: 4,  mod: 0, pcu: 300 },
+    "TSCAP2": { speed: 5,  mod: 0, pcu: 350 }
 };
 
 SFRPG.expansionBaySystems = {
@@ -153,4 +153,29 @@ SFRPG.driftEngineMap = {
     "major": 7,
     "superior": 7,
     "ultra": 9
+};
+
+SFRPG.shieldsPower = {
+    "10": 20,
+    "20": 40,
+    "30": 60,
+    "40": 80,
+    "50": 100,
+    "60": 120,
+    "70": 140,
+    "80": 160,
+    "90": 180,
+    "100": 200,
+    "120": 240,
+    "140": 280,
+    "160": 320,
+    "200": 400,
+    "240": 480,
+    "280": 560,
+    "320": 640,
+    "360": 720,
+    "420": 840,
+    "480": 960,
+    "540": 1080,
+    "600": 1200
 };
