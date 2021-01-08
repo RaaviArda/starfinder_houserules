@@ -1,0 +1,111 @@
+<div class="tab modules flexrow" data-group="primary" data-tab="modules">
+  <ol class="inventory-list">
+    <li class="item flexrow inventory-header spellbook-header">
+		<div class="item-controls flexrow">
+			<input type="text" name="data.attributes.highModules" value="{{data.attributes.highModules}}" placeholder="0" data-dtype="Number"/>
+		</div>
+		<h3 class="item-name flexrow">High</h3>
+		<div class="item-controls flexrow">
+			Description
+		</div>
+		<div class="item-controls flexrow">
+			PCU
+		</div>
+		<div class="item-controls flexrow">
+			<a class="item-control item-create highmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
+		</div>
+    </li>
+    <ol class="item-list">
+      {{#each modules as |module modid| }}
+        {{#if (eq module.slot 1)}}
+			<li class="item flexrow">
+			  <div class="item-name flexrow">
+				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+			  </div>
+			  <div class="item-detail type">
+				{{module.description}}
+			  </div>
+			  <div class="item-detail type">
+				{{module.pcu}}
+			  </div>
+			  <div class="item-controls">
+				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
+			  </div>
+			</li>
+		{{/if}}
+      {{/each}}
+    </ol>
+
+    <li class="item flexrow inventory-header spellbook-header">
+		<div class="item-controls flexrow">
+			<input type="text" name="data.attributes.midModules" value="{{data.attributes.midModules}}" placeholder="0" data-dtype="Number"/>
+		</div>
+		<h3 class="item-name flexrow">Mid</h3>
+		<div class="item-controls flexrow">
+			Description
+		</div>
+		<div class="item-controls flexrow">
+			PCU
+		</div>
+		<div class="item-controls flexrow">
+			<a class="item-control item-create midmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
+		</div>
+    </li>
+    <ol class="item-list">
+      {{#each modules as |module modid| }}
+        {{#if (eq module.slot 2)}}
+			<li class="item flexrow">
+			  <div class="item-name flexrow">
+				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+			  </div>
+			  <div class="item-detail type">
+				{{module.description}}
+			  </div>
+			  <div class="item-detail type">
+				{{module.pcu}}
+			  </div>
+			  <div class="item-controls">
+				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
+			  </div>
+			</li>
+		{{/if}}
+      {{/each}}
+    </ol>
+
+    <li class="item flexrow inventory-header spellbook-header">
+		<div class="item-controls flexrow">
+			<input type="text" name="data.attributes.lowModules" value="{{data.attributes.lowModules}}" placeholder="0" data-dtype="Number"/>
+		</div>
+		<h3 class="item-name flexrow">Low</h3>
+		<div class="item-controls flexrow">
+			Description
+		</div>
+		<div class="item-controls flexrow">
+			PCU
+		</div>
+		<div class="item-controls flexrow">
+			<a class="item-control item-create lowmodule-add" title="Create New Highslot Module"><i class="fas fa-plus-circle"></i> Add</a>
+		</div>
+    </li>
+    <ol class="item-list">
+      {{#each modules as |module modid| }}
+        {{#if (eq module.slot 3)}}
+			<li class="item flexrow">
+			  <div class="item-name flexrow">
+				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+			  </div>
+			  <div class="item-detail type">
+				{{module.description}}
+			  </div>
+			  <div class="item-detail type">
+				{{module.pcu}}
+			  </div>
+			  <div class="item-controls">
+				<a class="item-control module-delete" id="module-delete-{{modid}}" title="Delete Module"><i class="fas fa-trash"></i></a>
+			  </div>
+			</li>
+		{{/if}}
+      {{/each}}
+    </ol>
+
+</div>
