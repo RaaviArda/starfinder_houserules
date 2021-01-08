@@ -2,7 +2,7 @@
   "name": "FoundryVTT-starfinder-houserules-raavi",
   "title": "Starfinder Houserules Raavi",
   "description": "Houserules for Starfinder",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "minimumCoreVersion": "0.6.4",
   "compatibleCoreVersion": "0.7.9",
   "author": "Raavi#3926",
@@ -19,6 +19,8 @@
 
   "esmodules": ["module/config.js",
                 "module/ship-modules.js"],
+
+  "styles": ["styles/ship-modules.css"],
     
   "url": "https://github.com/RaaviArda/starfinder_houserules",
   "manifest": "https://github.com/RaaviArda/starfinder_houserules/releases/latest/download/module.json",

@@ -4,11 +4,11 @@
 		<div class="item-controls flexrow">
 			<input type="text" name="data.attributes.highModules" value="{{data.attributes.highModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
-		<h3 class="item-name flexrow">High</h3>
-		<div class="item-controls flexrow">
+		<div class="item-name flexrow">High</div>
+		<div class="item-detail desc flexrow">
 			Description
 		</div>
-		<div class="item-controls flexrow">
+		<div class="item-detail desc flexrow">
 			PCU
 		</div>
 		<div class="item-controls flexrow">
@@ -20,12 +20,12 @@
         {{#if (eq module.slot 1)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+				{{module.name}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.description}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.pcu}}
 			  </div>
 			  <div class="item-controls">
@@ -40,11 +40,11 @@
 		<div class="item-controls flexrow">
 			<input type="text" name="data.attributes.midModules" value="{{data.attributes.midModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
-		<h3 class="item-name flexrow">Mid</h3>
-		<div class="item-controls flexrow">
+		<div class="item-name flexrow">Mid</div>
+		<div class="item-detail desc flexrow">
 			Description
 		</div>
-		<div class="item-controls flexrow">
+		<div class="item-detail desc flexrow">
 			PCU
 		</div>
 		<div class="item-controls flexrow">
@@ -56,12 +56,12 @@
         {{#if (eq module.slot 2)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+				{{module.name}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.description}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.pcu}}
 			  </div>
 			  <div class="item-controls">
@@ -76,11 +76,11 @@
 		<div class="item-controls flexrow">
 			<input type="text" name="data.attributes.lowModules" value="{{data.attributes.lowModules}}" placeholder="0" data-dtype="Number"/>
 		</div>
-		<h3 class="item-name flexrow">Low</h3>
-		<div class="item-controls flexrow">
+		<div class="item-name flexrow">Low</div>
+		<div class="item-detail desc flexrow">
 			Description
 		</div>
-		<div class="item-controls flexrow">
+		<div class="item-detail desc flexrow">
 			PCU
 		</div>
 		<div class="item-controls flexrow">
@@ -92,12 +92,12 @@
         {{#if (eq module.slot 3)}}
 			<li class="item flexrow">
 			  <div class="item-name flexrow">
-				<h4 class="module-toggle-desc localRoll" id="module-toggle-desc-{{modid}}" title="Toggle Summary">{{module.name}}</h4>
+				{{module.name}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.description}}
 			  </div>
-			  <div class="item-detail type">
+			  <div class="item-detail desc">
 				{{module.pcu}}
 			  </div>
 			  <div class="item-controls">
