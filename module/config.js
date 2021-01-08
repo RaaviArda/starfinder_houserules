@@ -148,9 +148,9 @@ SFRPG.expansionBaySystems = {
 };
 
 SFRPG.driftEngineMap = {
-    "basic": 5,
-    "booster": 6,
-    "major": 6,
-    "superior": 6,
-    "ultra": 8
+    "basic": 6,
+    "booster": 7,
+    "major": 7,
+    "superior": 7,
+    "ultra": 9
 };

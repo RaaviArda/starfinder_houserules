@@ -19,11 +19,11 @@
             "Dread":"Dreadnought"
          },
          "DriftEngineSystems":{
-            "Basic":"Basic 5 LY",
-            "Booster":"Basic 6 LY",
-            "Major":"Fast 6 LY",
-            "Superior":"Econo 6 LY",
-            "Ultra":"Advanced 8 LY"
+            "Basic":"Basic 6 LY",
+            "Booster":"Basic 7 LY",
+            "Major":"Fast 7 LY",
+            "Superior":"Econo 7 LY",
+            "Ultra":"Advanced 9 LY"
          },
          "ExpansionBaySystems":{
             "Med"     : "Medical bay",
