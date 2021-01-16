@@ -1,14 +1,12 @@
 {
-  "name": "FoundryVTT-starfinder-houserules-raavi",
+  "name": "sfrpg-houserules-raavi",
   "title": "Starfinder Houserules Raavi",
   "description": "Houserules for Starfinder",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "minimumCoreVersion": "0.6.4",
   "compatibleCoreVersion": "0.7.9",
   "author": "Raavi#3926",
   "systems": ["sfrpg"],
-  "scripts": [],
-  "styles": [],
   "packs": [],
     
   "languages": [{
@@ -17,10 +15,18 @@
     "path": "languages/en.json"
   }],
 
+  "scripts": ["module/fabric.js",
+              "module/dijkstra.js",
+              "module/applyDamageToShips.js",
+              "module/starmap.js",
+              "module/resources.js"],
+
   "esmodules": ["module/config.js",
                 "module/ship-modules.js"],
 
-  "styles": ["styles/ship-modules.css"],
+  "styles": ["styles/ship-modules.css",
+             "styles/starmap.css",
+             "styles/resources.css"],
     
   "url": "https://github.com/RaaviArda/starfinder_houserules",
   "manifest": "https://github.com/RaaviArda/starfinder_houserules/releases/latest/download/module.json",

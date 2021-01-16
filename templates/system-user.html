@@ -1,0 +1,29 @@
+<div>
+    <table class="starmapTable">
+        <tr>
+            <td>Gwiazda</td>
+            <td>{{system.name}}</td>
+            <td>Typ: {{sysDisp}}<br>Promień: {{system.radius}}<br>Temperatura: {{system.temperature}}</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+        </tr>
+    {{#each planets as |planet pid|}}
+        <tr>
+            <td style="text-align: center; vertical-align: middle;"><img src="{{planet.image}}" width="64" height="64"></td>
+            <td>{{planet.name}}</td>
+            <td>Typ: {{planet.type}}<br>
+                Orbita: {{planet.orbit}}, {{planet.years}} Y<br>
+                Długość dnia: {{planet.cycle}} D<br>
+                Promień: {{planet.radius}} E<br>
+                Grawitacja: {{planet.gravity}} G<br>
+                Atmosfera: {{planet.atmosphere}}</td>
+            <td>Zasoby:<br>ORG: {{planet.organics}}<br>MET: {{planet.metals}}<br>ENE: {{planet.energy}}<br>EXO: {{planet.exotic}}</td>
+            <td>Specjalne:
+            {{#each planet.specials as |special sid|}}
+              <br>{{special}}
+            {{/each}}
+            </td>
+        </tr>
+    {{/each}}
+    </table>
+</div>

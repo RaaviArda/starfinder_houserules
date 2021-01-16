@@ -1,0 +1,20 @@
+.mapcanvas {
+	border: 1px solid #FFFFFF;
+}
+
+.mapdiv {
+	width: 1080px;
+	display: table-cell;
+	background-color: #000000;
+}
+
+.starmapTable {
+	border: 1px solid #FFFFFF;
+	color: #FFFFFF;
+	background-color: #000000;
+}
+
+.starmapTable td {
+	border: 1px solid #FFFFFF;
+	padding: 5px;
+}

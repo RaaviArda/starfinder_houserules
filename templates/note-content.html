@@ -1,0 +1,26 @@
+<p><a href="https://www.google.com" target="_blank" rel="noopener">adfasfd</a></p>
+<p><img src="systems/sfrpg/icons/classes/additional_skill_expertise.png" alt="" width="256" height="256" /></p>
+<table border="1">
+<tbody>
+<tr>
+<td>System</td>
+<td>Planety</td>
+<td>Zasoby</td>
+<td>Eksploracja</td>
+<td>Specjalne</td>
+</tr>
+{{#each systems as |system sid|}}
+<tr>
+<td>{{system.name}}</td>
+<td>{{system.planets}}</td>
+<td>
+{{#each system.resources as |res rid|}}
+{{res}}<br>
+{{/each}}
+</td>
+<td>{{system.explore}}</td>
+<td>{{system.specials}}</td>
+</tr>
+{{/each}}
+</tbody>
+</table>

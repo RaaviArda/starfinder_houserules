@@ -1,0 +1,77 @@
+<div>
+    <div class="field">
+        <form>
+            <div>MAIN</div>
+            <div>ID: {{planet.planetId}}</div>
+            <div class="form-group">
+                <label for="planet-name">Name:</label>
+                <input id="planet-name" name="planet-name" value="{{planet.name}}"/>
+                <input type="hidden" id="planet-id" value="{{planet.planetId}}">
+                <input type="hidden" id="system-id" value="{{planet.systemId}}">
+            </div>
+            <div class="form-group">
+                <label for="planet-type">Type:</label>
+                <select id="planet-type">
+                {{#select planet.type}}
+                {{#each types as |type tid|}}
+                    <option value="{{tid}}">{{type}}</option>
+                {{/each}}
+                {{/select}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="planet-orbit">Orbit:</label>
+                <input id="planet-orbit" name="planet-orbit" data-dtype="Number" placeholder="0" value="{{planet.orbit}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-cycle">Cycle:</label>
+                <input id="planet-cycle" name="planet-cycle" data-dtype="Number" placeholder="0" value="{{planet.cycle}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-radius">Radius:</label>
+                <input id="planet-radius" name="planet-radius" data-dtype="Number" placeholder="0" value="{{planet.radius}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-gravity">Gravity:</label>
+                <input id="planet-gravity" name="planet-gravity" data-dtype="Number" placeholder="0" value="{{planet.gravity}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-atmosphere">Atmosphere:</label>
+                <select id="planet-atmosphere">
+                    {{#select planet.atmosphere}}
+                    {{#each atmospheres as |atmosphere aid|}}
+                    <option value="{{aid}}">{{atmosphere}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+            <div>RESOURCES</div>
+            <div class="form-group">
+                <label for="planet-organics">Organics:</label>
+                <input id="planet-organics" name="planet-organics" data-dtype="Number" placeholder="0" value="{{planet.organics}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-metals">Metals:</label>
+                <input id="planet-metals" name="planet-metals" data-dtype="Number" placeholder="0" value="{{planet.metals}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-energy">Energy:</label>
+                <input id="planet-energy" name="planet-energy" data-dtype="Number" placeholder="0" value="{{planet.energy}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-exotic">Exotics:</label>
+                <input id="planet-exotic" name="planet-exotic" data-dtype="Number" placeholder="0" value="{{planet.exotic}}"/>
+            </div>
+
+            <div>OTHER</div>
+            <div class="form-group">
+                <label for="planet-specials">Specials:</label>
+                <input id="planet-specials" name="planet-specials" data-dtype="Number" placeholder="0" value="{{planet.specials}}"/>
+            </div>
+            <div class="form-group">
+                <label for="planet-gmNotes">GM Notes:</label>
+                <input id="planet-gmNotes" name="planet-gmNotes" data-dtype="Number" placeholder="0" value="{{planet.gmNotes}}"/>
+            </div>
+        </form>
+    </div>
+</div>
