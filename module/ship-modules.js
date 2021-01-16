@@ -1,19 +1,21 @@
 Hooks.once("ready", () => {
-    if (game.settings.settings.get("sfrpg-houserules-raavi.migratedShipdata") === undefined) {
-        let actors = game.actors.filter((a) => a.data.type === "starship");
-        actors.forEach((a) => {
-            let flags = a.data.flags["FoundryVTT-starfinder-houserules-raavi"];
-            if (flags !== undefined) {
-                let modList = flags["modList"];
-                a.setFlag("sfrpg-houserules-raavi", "modList", modList);
-            }
+    if (game.user.isGM) {
+        if (game.settings.settings.get("sfrpg-houserules-raavi.migratedShipdata") === undefined) {
+            let actors = game.actors.filter((a) => a.data.type === "starship");
+            actors.forEach((a) => {
+                let flags = a.data.flags["FoundryVTT-starfinder-houserules-raavi"];
+                if (flags !== undefined) {
+                    let modList = flags["modList"];
+                    a.setFlag("sfrpg-houserules-raavi", "modList", modList);
+                }
+            });
+        }
+        game.settings.register("sfrpg-houserules-raavi", "migratedShipdata", {
+            scope: "world",
+            config: false,
+            default: true
         });
     }
-    game.settings.register("sfrpg-houserules-raavi", "migratedShipdata", {
-        scope: "world",
-        config: false,
-        default: true
-    });
 });
 
 
