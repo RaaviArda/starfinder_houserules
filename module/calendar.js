@@ -87,7 +87,7 @@ class Calendar extends Application {
         let dateElement = document.getElementById("calendar-date");
         let timeElement = document.getElementById("calendar-time");
 
-        dateElement.innerHTML = this.zeroFill(calendarDate.getUTCDay() + 1, 2) + "-" +
+        dateElement.innerHTML = this.zeroFill(calendarDate.getUTCDate(), 2) + "-" +
                                 this.zeroFill(calendarDate.getUTCMonth() + 1, 2) + "-" +
                                 this.zeroFill(calendarDate.getUTCFullYear(), 4);
 
