@@ -1,27 +1,27 @@
-<table border="1">
+<table style="border: 1px solid #000000;">
     <tbody>
     <tr>
-        <td>System</td>
-        <td>Koordynaty</td>
-        <td>Właściciel</td>
-        <td>Planety</td>
-        <td>Zasoby</td>
-        <td>Eksploracja</td>
-        <td>Specjalne</td>
+        <td style="border: 1px solid #000000; padding: 2px;">System</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Koordynaty</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Właściciel</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Planety</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Zasoby</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Eksploracja</td>
+        <td style="border: 1px solid #000000; padding: 2px;">Specjalne</td>
     </tr>
     {{#each systems as |system sid|}}
     <tr>
-        <td><a onclick="showSystem({{system.id}})">{{system.name}}</a></td>
-        <td>{{system.cx}} ; {{system.cy}}</td>
-        <td style="background-color: {{system.ownerColor}}">{{system.owner}}</td>
-        <td>{{system.planets}}</td>
-        <td>
+        <td style="border: 1px solid #000000; padding: 2px;"><a onclick="showSystem({{system.id}})">{{system.name}}</a></td>
+        <td style="border: 1px solid #000000; padding: 2px;">{{system.cx}} ; {{system.cy}}</td>
+        <td style="border: 1px solid #000000; padding: 2px; background-color: {{system.ownerColor}};">{{system.owner}}</td>
+        <td style="border: 1px solid #000000; padding: 2px;">{{system.planets}}</td>
+        <td style="border: 1px solid #000000; padding: 2px;">
             {{#each system.resources as |res rid|}}
             {{res}}<br>
             {{/each}}
         </td>
-        <td>{{system.explore}}</td>
-        <td>{{system.specials}}</td>
+        <td style="border: 1px solid #000000; padding: 2px;">{{system.explore}}</td>
+        <td style="border: 1px solid #000000; padding: 2px;">{{system.specials}}</td>
     </tr>
     {{/each}}
     </tbody>
