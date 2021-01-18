@@ -47,7 +47,7 @@ Hooks.on('renderCalendar', () => {
     calDisp.updateDisplay();
 });
 
-Hooks.on('updateJournalEntry', (journal, data, opts, userId) => {
+Hooks.on('updateJournalEntry', async (journal, data, opts, userId) => {
     if (journal.data.name === "Starmap" && userId !== game.userId) {
         let note = game.journal.entities.find((j) => j.data.name === "Starmap");
         starmapSystems = note.getFlag("sfrpg-houserules-raavi", "starmapSystems");
@@ -56,7 +56,7 @@ Hooks.on('updateJournalEntry', (journal, data, opts, userId) => {
         jumpCost = note.getFlag("sfrpg-houserules-raavi", "jumpCost");
         currentSystem = note.getFlag("sfrpg-houserules-raavi", "currentSystem");
         starshipResources = note.getFlag("sfrpg-houserules-raavi", "starshipResources");
-        refreshMap();
+        await refreshMap();
         resDisp.updateDisplay();
         calDisp.updateDisplay();
     }
@@ -470,24 +470,35 @@ async function updateNoteContents() {
             let planetsInSystem = starmapPlanets.filter((p) => p.systemId === sys.id);
             let resourcesInSystem = ["❌", "❌", "❌", "❌"];
             let specialsInSystem = 0;
-            planetsInSystem.forEach((p) => {
-                if (p.known > 0) {
-                    if (p.organics > 0) {
-                        resourcesInSystem[0] = "✅";
+            let planetsInSystemTotal = planetsInSystem.length;
+            let sysOwner = "❓";
+            let sysOwnerColor = "#FFFFFF";
+            if (sys.known === 2) {
+                sysOwner = CONFIG.SFRPG.raceNames[sys.owner];
+                sysOwnerColor = "#" + CONFIG.SFRPG.starmapColors[sys.owner];
+                planetsInSystem.forEach((p) => {
+                    if (p.known > 0) {
+                        if (p.organics > 0) {
+                            resourcesInSystem[0] = "✅";
+                        }
+                        if (p.metals > 0) {
+                            resourcesInSystem[1] = "✅";
+                        }
+                        if (p.energy > 0) {
+                            resourcesInSystem[2] = "✅";
+                        }
+                        if (p.exotic > 0) {
+                            resourcesInSystem[3] = "✅";
+                        }
+                        let specialsOnPlanet = p.specials;
+                        specialsInSystem = specialsInSystem + (specialsOnPlanet.length - 1);
                     }
-                    if (p.metals > 0) {
-                        resourcesInSystem[1] = "✅";
-                    }
-                    if (p.energy > 0) {
-                        resourcesInSystem[2] = "✅";
-                    }
-                    if (p.exotic > 0) {
-                        resourcesInSystem[3] = "✅";
-                    }
-                    let specialsOnPlanet = p.specials;
-                    specialsInSystem = specialsInSystem + (specialsOnPlanet.length - 1);
-                }
-            });
+                });
+            } else {
+                resourcesInSystem = ["❓", "❓", "❓", "❓"];
+                specialsInSystem = "❓";
+                planetsInSystemTotal = "❓";
+            }
             let resourcesToShow = ["ORG: " + resourcesInSystem[0], "MET: " + resourcesInSystem[1], "ENE: " + resourcesInSystem[2], "EGZ: " + resourcesInSystem[3]];
             let exploreToShow = "Nieznany";
             if (sys.known === 1) {
@@ -498,7 +509,11 @@ async function updateNoteContents() {
             let singleSystem = {
                 id: sys.id,
                 name: sys.name,
-                planets: planetsInSystem.length,
+                cx: sys.cx,
+                cy: sys.cy,
+                owner: sysOwner,
+                ownerColor: sysOwnerColor,
+                planets: planetsInSystemTotal,
                 resources: resourcesToShow,
                 explore: exploreToShow,
                 specials: specialsInSystem

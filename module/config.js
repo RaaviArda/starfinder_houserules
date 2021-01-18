@@ -604,6 +604,8 @@ SFRPG.starmapConnections = [
     {connId: 152, sys1: 5, sys1cx: 464, sys1cy: 413, sys2: 53, sys2cx: 591, sys2cy: 416, known: false}
 ];
 
+SFRPG.raceNames = ["Brak", "Crekte", "Shak'Ul", "Vruts", "Xyquill", "Oktu", "Drifterzy"];
+
 SFRPG.starmapColors = ["FFFFFF", "FF0000", "FF7C00", "00FF00", "0000FF", "FF00FF", "00FFFF"];
 
 SFRPG.planetTypes = ["Jalowy",
