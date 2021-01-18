@@ -2,7 +2,7 @@
   "name": "sfrpg-houserules-raavi",
   "title": "Starfinder Houserules Raavi",
   "description": "Houserules for Starfinder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "minimumCoreVersion": "0.6.4",
   "compatibleCoreVersion": "0.7.9",
   "author": "Raavi#3926",
@@ -19,14 +19,16 @@
               "module/dijkstra.js",
               "module/applyDamageToShips.js",
               "module/starmap.js",
-              "module/resources.js"],
+              "module/resources.js",
+              "module/calendar.js"],
 
   "esmodules": ["module/config.js",
                 "module/ship-modules.js"],
 
   "styles": ["styles/ship-modules.css",
              "styles/starmap.css",
-             "styles/resources.css"],
+             "styles/resources.css",
+             "styles/calendar.css"],
     
   "url": "https://github.com/RaaviArda/starfinder_houserules",
   "manifest": "https://github.com/RaaviArda/starfinder_houserules/releases/latest/download/module.json",

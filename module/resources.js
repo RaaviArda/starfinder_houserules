@@ -78,7 +78,12 @@ class Resources extends Application {
     updateDisplay() {
         for (let prop in starshipResources) {
             let element = document.getElementById("resources-"+prop);
-            element.innerHTML = starshipResources[prop] + " " + element.dataset.resunit;
+            if (starshipResources[prop].max <= 0) {
+                element.innerHTML = starshipResources[prop].value + " " + element.dataset.resunit;
+            } else {
+                element.innerHTML = starshipResources[prop].value + " " + element.dataset.resunit + " / " +
+                                    starshipResources[prop].max + " " + element.dataset.resunit;
+            }
         }
     }
 
@@ -90,10 +95,10 @@ class Resources extends Application {
 
     async createDialog(type, data) {
         let updateRes = false;
-        let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/resource-mod-dialog.html", { resourceName: type, resourceAmt: data });
+        let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/resource-mod-dialog.html", { resource: data });
 
         new Dialog({
-            title: `Modify resource`,
+            title: `Modify resource: ` + type,
             content: dialogContent,
             buttons: {
               yes: {
@@ -118,9 +123,10 @@ class Resources extends Application {
     }
 
     async updateResources(type, html) {
-        let newValue = html.find('[id=resource-name]')[0].value;
+        let newValue = parseInt(html.find('[id=resource-value]')[0].value);
+        let newMax = parseInt(html.find('[id=resource-max]')[0].value);
 
-        starshipResources[type] = parseInt(newValue);
+        starshipResources[type] = {value: newValue, max: newMax};
         await updateNote("starshipResources", starshipResources);
     }
 
@@ -128,7 +134,6 @@ class Resources extends Application {
       const displays = '.resDisp';
       const resourcesMove = '#resources-move';
 
-      //Credits
       html.find(displays).click(ev => {
         ev.preventDefault();
         if (game.user.isGM) {
@@ -200,7 +205,7 @@ class Resources extends Application {
             }
           }
         } else if(isRightMB){
-          Calendar.resetPos();
+          this.resetPos();
         }
       });
     }

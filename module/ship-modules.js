@@ -1,26 +1,33 @@
-Hooks.once("ready", () => {
+Hooks.on('init', () => {
+    game.settings.register("sfrpg-houserules-raavi", "migratedShipdata", {
+        name: "Migrated ship data",
+        hint: "If disabled all ship data will be re-migrated",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    });
+});
+
+Hooks.once("ready", async () => {
     if (game.user.isGM) {
-        if (game.settings.settings.get("sfrpg-houserules-raavi.migratedShipdata") === undefined) {
+        if (!game.settings.get("sfrpg-houserules-raavi", "migratedShipdata")) {
             let actors = game.actors.filter((a) => a.data.type === "starship");
             actors.forEach((a) => {
                 let flags = a.data.flags["FoundryVTT-starfinder-houserules-raavi"];
                 if (flags !== undefined) {
                     let modList = flags["modList"];
-                    a.setFlag("sfrpg-houserules-raavi", "modList", modList);
+                    a.update({"data.attributes.modList":{value: modList}});
                 }
             });
+            await game.settings.set("sfrpg-houserules-raavi", "migratedShipdata", true);
         }
-        game.settings.register("sfrpg-houserules-raavi", "migratedShipdata", {
-            scope: "world",
-            config: false,
-            default: true
-        });
     }
 });
 
 
-Hooks.on(`renderActorSheet`, (app, html, data) => {
-    addModulesTab(app, html, data).then(function () {
+Hooks.on(`renderActorSheet`, async (app, html, data) => {
+    await addModulesTab(app, html, data).then(function () {
         if (app.activateModulesTab) {
             app._tabs[0].activate("modules");
         }
@@ -38,58 +45,49 @@ async function addModulesTab(app, html, data) {
             tabs.append(modulesTabBtn);
         }
         if (actor.data.data.attributes.highModules === undefined || actor.data.data.attributes.highModules === null) {
-            actor.data.data.attributes.highModules = 0;
+            await actor.update({"data.attributes.highModules":0});
         }
 
         if (actor.data.data.attributes.midModules === undefined || actor.data.data.attributes.midModules === null) {
-            actor.data.data.attributes.midModules = 0;
+            await actor.update({"data.attributes.midModules":0});
         }
 
         if (actor.data.data.attributes.lowModules === undefined || actor.data.data.attributes.lowModules === null) {
-            actor.data.data.attributes.lowModules = 0;
+            await actor.update({"data.attributes.lowModules":0});
         }
 
         if (actor.data.data.attributes.intModules === undefined || actor.data.data.attributes.intModules === null) {
-            actor.data.data.attributes.intModules = 0;
+            await actor.update({"data.attributes.intModules":0});
         }
 
-        if (
-            actor.data.flags["sfrpg-houserules-raavi"] === undefined ||
-            actor.data.flags["sfrpg-houserules-raavi"] === null
-        ) {
-            await actor.setFlag("sfrpg-houserules-raavi", "modList", []);
+        if (actor.data.data.attributes.modList === undefined || actor.data.data.attributes.modList=== null) {
+            await actor.update({"data.attributes.modList":{value: []}});
         }
 
-
-        let flags = actor.getFlag("sfrpg-houserules-raavi", "modList");
-
-        updatePCU(actor);
+        await updatePCU(actor);
 
         let sheet = html.find(".sheet-body");
 
         let modulesTabHtml = $(
             await renderTemplate(
                 "modules/sfrpg-houserules-raavi/templates/modules-section.html",
-                {
-                    modules: flags,
-                    data: actor.data.data
-                }
+                { modules: actor.data.data.attributes.modList.value, data: actor.data.data }
             )
         );
 
         let modulesHTML = await compileModulesTab(modulesTabHtml, sheet);
 
         modulesHTML.find(".highmodule-add").click(async (event) => {
-            generateModuleOnClick(event, html, app, actor, 1);
+            await addModuleClick(event, html, app, actor, 1);
         });
         modulesHTML.find(".midmodule-add").click(async (event) => {
-            generateModuleOnClick(event, html, app, actor, 2);
+            await addModuleClick(event, html, app, actor, 2);
         });
         modulesHTML.find(".lowmodule-add").click(async (event) => {
-            generateModuleOnClick(event, html, app, actor, 3);
+            await addModuleClick(event, html, app, actor, 3);
         });
         modulesHTML.find(".intmodule-add").click(async (event) => {
-            generateModuleOnClick(event, html, app, actor, 4);
+            await addModuleClick(event, html, app, actor, 4);
         });
 
         modulesHTML.find(".module-delete").click(async (event) => {
@@ -99,9 +97,7 @@ async function addModulesTab(app, html, data) {
             let fieldId = event.currentTarget.id;
             let moduleId = parseInt(fieldId.replace("module-delete-", ""));
             let del = false;
-            let dialogContent = await renderTemplate(
-                "modules/sfrpg-houserules-raavi/templates/delete-module-dialog.html"
-            );
+            let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/delete-module-dialog.html", {});
 
             // Create dialog
             new Dialog({
@@ -122,15 +118,14 @@ async function addModulesTab(app, html, data) {
                 default: "yes",
                 close: async () => {
                     if (del) {
-                        let flags = actor.getFlag("sfrpg-houserules-raavi", "modList");
-                        flags.splice(moduleId, 1);
-                        await actor.unsetFlag("sfrpg-houserules-raavi", "modList");
-                        await actor.setFlag("sfrpg-houserules-raavi", "modList", flags);
-                        updatePCU(actor);
+                        let modList = actor.data.data.attributes.modList.value;
+                        modList.splice(moduleId, 1);
+                        await actor.update({"data.attributes.modList":{value: modList}});
+                        await updatePCU(actor);
                     }
                     fixActiveTab(app);
                 },
-            }).render();
+            }).render(true);
         });
 
         tabs.find('.item[data-tab="modules"]').click(() => {
@@ -143,11 +138,11 @@ async function addModulesTab(app, html, data) {
     }
 }
 
-async function generateModuleOnClick(event, html, app, actor, slot) {
+async function addModuleClick(event, html, app, actor, slot) {
     event.preventDefault();
 
     let add = false;
-    let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/add-module-dialog.html");
+    let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/add-module-dialog.html", {});
 
     // Create dialog
     new Dialog({
@@ -168,11 +163,11 @@ async function generateModuleOnClick(event, html, app, actor, slot) {
         default: "yes",
         close: async (html) => {
             if (add) {
-                addModule(actor, html, slot);
+                await addModule(actor, html, slot);
             }
             fixActiveTab(app);
         },
-    }).render();
+    }).render(true);
 }
 
 async function addModule(actor, html, modSlot) {
@@ -186,11 +181,10 @@ async function addModule(actor, html, modSlot) {
 
     let module = {name: modName, description: modDesc, pcu: parseInt(modPCU), slot: modSlot};
 
-    let flags = actor.getFlag("sfrpg-houserules-raavi", "modList");
-    flags.push(module);
-    await actor.unsetFlag("sfrpg-houserules-raavi", "modList");
-    await actor.setFlag("sfrpg-houserules-raavi", "modList", flags);
-    updatePCU(actor);
+    let modList = actor.data.data.attributes.modList.value;
+    modList.push(module);
+    await actor.update({"data.attributes.modList": {value: modList}});
+    await updatePCU(actor);
 }
 
 async function compileModulesTab(modulesTabHtml, sheet) {
@@ -204,19 +198,19 @@ function fixActiveTab(app) {
     app.activateModulesTab = true;
 }
 
-function updatePCU(actor) {
-    let flags = actor.getFlag("sfrpg-houserules-raavi", "modList");
+async function updatePCU(actor) {
+    let modList = actor.data.data.attributes.modList.value;
 
-    const thrusters = CONFIG.SFRPG.thrustersMap[actor.data.data.details.systems.thrusters] || {
+    let thrusters = CONFIG.SFRPG.thrustersMap[actor.data.data.details.systems.thrusters] || {
         speed: 8,
         mode: 0,
         pcu: 0
     };
-    const shieldPCU = CONFIG.SFRPG.shieldsPower[actor.data.data.details.systems.shields] || 0;
+    let shieldPCU = CONFIG.SFRPG.shieldsPower[actor.data.data.details.systems.shields] || 0;
 
     let totalPower = thrusters.pcu + shieldPCU;
 
-    flags.forEach(module => totalPower = totalPower + module.pcu);
+    modList.forEach(module => totalPower = totalPower + module.pcu);
 
-    actor.data.data.attributes.power.value = totalPower;
+    await actor.update({"data.attributes.pcu":{value: totalPower, max: actor.data.data.attributes.power.max}});
 }

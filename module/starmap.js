@@ -1,45 +1,50 @@
-Hooks.once("ready", () => {
+Hooks.once("ready", async () => {
     let note = game.journal.entities.find((j) => j.data.name === "Starmap");
-    let migrated = note.getFlag("sfrpg-houserules-raavi", "migrated");
-    if (migrated === undefined || migrated === null || migrated === false) {
-        starmapSystems = CONFIG.SFRPG.starmapSystems;
-        starmapPlanets = CONFIG.SFRPG.starmapPlanets;
-        starmapConnections = CONFIG.SFRPG.starmapConnections;
-        jumpCost = 10;
-        jumpRange = 6;
-        currentSystem = {id: 0, cx: 183, cy: 244, owner: 0};
-        starshipResources = {credits: 0, mcredits: 0, cap: 0, fuel: 0, org: 0, met: 0, ene: 0, exo: 0, probes: 0};
-        convertStarmapPlanets();
-        note.setFlag("sfrpg-houserules-raavi", "starmapSystems", starmapSystems);
-        note.setFlag("sfrpg-houserules-raavi", "starmapPlanets", starmapPlanets);
-        note.setFlag("sfrpg-houserules-raavi", "starmapConnections", starmapConnections);
-        note.setFlag("sfrpg-houserules-raavi", "starshipResources", starshipResources);
-        note.setFlag("sfrpg-houserules-raavi", "jumpCost", jumpCost);
-        note.setFlag("sfrpg-houserules-raavi", "jumpRange", jumpRange);
-        note.setFlag("sfrpg-houserules-raavi", "currentSystem", currentSystem);
-        note.setFlag("sfrpg-houserules-raavi", "migrated", true);
-
-
-    } else {
-        starmapSystems = note.getFlag("sfrpg-houserules-raavi", "starmapSystems");
-        starmapPlanets = note.getFlag("sfrpg-houserules-raavi", "starmapPlanets");
-        starmapConnections = note.getFlag("sfrpg-houserules-raavi", "starmapConnections");
-        jumpCost = note.getFlag("sfrpg-houserules-raavi", "jumpCost");
-        jumpRange = note.getFlag("sfrpg-houserules-raavi", "jumpRange");
-        currentSystem = note.getFlag("sfrpg-houserules-raavi", "currentSystem");
-        starshipResources = note.getFlag("sfrpg-houserules-raavi", "starshipResources");
+    if (game.user.isGM) {
+        let defaultResources = {
+            credits: {value: 0, max: 0},
+            mcredits: {value: 0, max: 0},
+            cap: {value: 0, max: 0},
+            fuel: {value: 0, max: 0},
+            org: {value: 0, max: 0},
+            met: {value: 0, max: 0},
+            ene: {value: 0, max: 0},
+            exo: {value: 0, max: 0},
+            probes: {value: 0, max: 0},
+            food: {value: 0, max: 0}
+        };
+        starmapSystems =        await getNoteContents(note, "starmapSystems", CONFIG.SFRPG.starmapSystems);
+        starmapPlanets =        await getNoteContents(note, "starmapPlanets", CONFIG.SFRPG.starmapPlanets);
+        starmapConnections =    await getNoteContents(note, "starmapConnections", CONFIG.SFRPG.starmapConnections);
+        jumpCost =              await getNoteContents(note, "jumpCost", 10);
+        jumpRange =             await getNoteContents(note, "jumpRange", 6);
+        currentSystem =         await getNoteContents(note, "currentSystem", {id: 0, cx: 183, cy: 244, owner: 0});
+        starshipResources =     await getNoteContents(note, "starshipResources", defaultResources);
+        calendarDate = new Date(await getNoteContents(note, "calendarDate", "2185-05-04 22:00:00"));
+        fuelPerHour =           await getNoteContents(note, "fuelPerHour", 1);
+        foodPerDay =            await getNoteContents(note, "foodPerDay", 5);
     }
-    updateNoteContents();
+    await updateNoteContents();
 
     resDisp = new Resources();
     resDisp.isOpen = false;
     resDisp.loadSettings();
-    resDisp.toggleResources();
+    await resDisp.toggleResources();
+
+    calDisp = new Calendar();
+    calDisp.isOpen = false;
+    calDisp.loadSettings();
+    await calDisp.toggleCalendar();
+
     mapOpen = false;
 });
 
 Hooks.on('renderResources', () => {
     resDisp.updateDisplay();
+});
+
+Hooks.on('renderCalendar', () => {
+    calDisp.updateDisplay();
 });
 
 Hooks.on('updateJournalEntry', (journal, data, opts, userId) => {
@@ -53,6 +58,7 @@ Hooks.on('updateJournalEntry', (journal, data, opts, userId) => {
         starshipResources = note.getFlag("sfrpg-houserules-raavi", "starshipResources");
         refreshMap();
         resDisp.updateDisplay();
+        calDisp.updateDisplay();
     }
 });
 
@@ -61,6 +67,12 @@ var starmapPlanets;
 var starmapConnections;
 var jumpCost;
 var currentSystem;
+var starshipResources;
+var jumpRange;
+var calendarDate;
+var fuelPerHour;
+var foodPerDay;
+
 var starMapCanvas;
 var starMapCoords;
 var starMapSysName;
@@ -68,13 +80,11 @@ var starMapFuelCost;
 var starMapCreditCost;
 var selSysX;
 var selSysY;
-var starshipResources;
+var calDisp;
 var resDisp;
 var mapOpen;
-var jumpRange;
 
 // Main stuff
-
 async function makeMap() {
     let dialogContent = await renderTemplate(
         "modules/sfrpg-houserules-raavi/templates/starmap.html", {}
@@ -254,7 +264,7 @@ async function moveShip(systemId, cost, direct) {
                 let newSys = starmapSystems.find((s) => s.id === systemId);
                 let fuelCost = calcFuel(currentSystem, newSys, false, 2);
                 let distance = calcDistanceLY(currentSystem, newSys);
-                if (fuelCost > starshipResources.fuel) {
+                if (fuelCost > starshipResources.fuel.value) {
                     ui.notifications.error("Jump fuel cost " + fuelCost + " is above available fuel");
                     return;
                 }
@@ -265,11 +275,11 @@ async function moveShip(systemId, cost, direct) {
                 await performMoveShip(newSys, fuelCost, 0);
             } else {
                 let jumpResult = calcRouteToSystem(systemId, false);
-                if (jumpResult.fuel > starshipResources.fuel) {
+                if (jumpResult.fuel > starshipResources.fuel.value) {
                     ui.notifications.error("Jump fuel cost " + jumpResult.fuel + " is above available fuel");
                     return;
                 }
-                if (jumpResult.credits > starshipResources.credits) {
+                if (jumpResult.credits > starshipResources.credits.value) {
                     ui.notifications.error("Jump credits cost " + jumpResult.credits + " is above available credits");
                     return;
                 }
@@ -291,8 +301,8 @@ async function performMoveShip(newSys, fuelCost, creditsCost) {
     newSys.known = 2;
     currentSystem = newSys;
     if (fuelCost > 0 || creditsCost > 0) {
-        starshipResources.fuel = starshipResources.fuel - fuelCost;
-        starshipResources.credits = starshipResources.credits - creditsCost;
+        starshipResources.fuel.value = starshipResources.fuel.value - fuelCost;
+        starshipResources.credits.value = starshipResources.credits.value - creditsCost;
         await updateNote("starshipResources", starshipResources);
         resDisp.updateDisplay();
     }
@@ -435,8 +445,20 @@ async function updatePlanet(html) {
 
 async function updateNote(type, data) {
     let note = game.journal.entities.find((j) => j.data.name === "Starmap");
-    await note.unsetFlag("sfrpg-houserules-raavi", type);
-    await note.setFlag("sfrpg-houserules-raavi", type, data);
+    let oldData = note.getFlag("sfrpg-houserules-raavi", type);
+    if (oldData !== data) {
+        await note.unsetFlag("sfrpg-houserules-raavi", type);
+        await note.setFlag("sfrpg-houserules-raavi", type, data);
+    }
+}
+
+async function getNoteContents(note, type, defaultData) {
+    let data = note.getFlag("sfrpg-houserules-raavi", type);
+    if (data === undefined || data === null) {
+        await note.setFlag("sfrpg-houserules-raavi", type, defaultData);
+        return defaultData;
+    }
+    return data;
 }
 
 async function updateNoteContents() {
@@ -463,7 +485,7 @@ async function updateNoteContents() {
                         resourcesInSystem[3] = "✅";
                     }
                     let specialsOnPlanet = p.specials;
-                    specialsInSystem = specialsInSystem + specialsOnPlanet.length;
+                    specialsInSystem = specialsInSystem + (specialsOnPlanet.length - 1);
                 }
             });
             let resourcesToShow = ["ORG: " + resourcesInSystem[0], "MET: " + resourcesInSystem[1], "ENE: " + resourcesInSystem[2], "EGZ: " + resourcesInSystem[3]];
