@@ -1,29 +1,50 @@
-Hooks.once("ready", async () => {
-    let note = game.journal.entities.find((j) => j.data.name === "Starmap");
-    if (game.user.isGM) {
-        let defaultResources = {
-            credits: {value: 0, max: 0},
-            mcredits: {value: 0, max: 0},
-            cap: {value: 0, max: 0},
-            fuel: {value: 0, max: 0},
-            org: {value: 0, max: 0},
-            met: {value: 0, max: 0},
-            ene: {value: 0, max: 0},
-            exo: {value: 0, max: 0},
-            probes: {value: 0, max: 0},
-            food: {value: 0, max: 0}
-        };
-        starmapSystems =        await getNoteContents(note, "starmapSystems", CONFIG.SFRPG.starmapSystems);
-        starmapPlanets =        await getNoteContents(note, "starmapPlanets", CONFIG.SFRPG.starmapPlanets);
-        starmapConnections =    await getNoteContents(note, "starmapConnections", CONFIG.SFRPG.starmapConnections);
-        jumpCost =              await getNoteContents(note, "jumpCost", 10);
-        jumpRange =             await getNoteContents(note, "jumpRange", 6);
-        currentSystem =         await getNoteContents(note, "currentSystem", {id: 0, cx: 183, cy: 244, owner: 0});
-        starshipResources =     await getNoteContents(note, "starshipResources", defaultResources);
-        calendarDate = new Date(await getNoteContents(note, "calendarDate", "2185-05-04 22:00:00"));
-        fuelPerHour =           await getNoteContents(note, "fuelPerHour", 1);
-        foodPerDay =            await getNoteContents(note, "foodPerDay", 5);
+Hooks.on('init', () => {
+    game.settings.register("sfrpg-houserules-raavi", "migratedMainData", {
+        name: "Migrated main data",
+        hint: "If disabled all main data will be re-migrated",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean
+    });
+
+    settingsToRegister.forEach((s) => {
+        game.settings.register("sfrpg-houserules-raavi", s.setting, {
+            name: s.setting,
+            hint: s.setting,
+            scope: "world",
+            config: false,
+            default: s.default,
+            type: s.type,
+            onChange: async (value) => await updateLocalData(s.setting, value)
+        });
+    });
+});
+
+async function updateLocalData(type, value) {
+    if (type === "calendarDate") {
+        localData[type] = new Date(value);
+        calDisp.updateDisplay();
+    } else if (type === "starshipResources") {
+        localData[type] = value;
+        resDisp.updateDisplay();
+    } else if (type === "starmapSystems" || type === "starmapPlanets" || type === "starmapConnections" || type === "currentSystem") {
+        localData[type] = value;
+        await refreshMap();
+    } else {
+        localData[type] = value;
     }
+}
+
+Hooks.once("ready", async () => {
+    if (game.user.isGM) {
+        if (!game.settings.get("sfrpg-houserules-raavi", "migratedMainData")) {
+            await migrateFromFlagsToSettings();
+            await game.settings.set("sfrpg-houserules-raavi", "migratedMainData", true);
+        }
+    }
+
+    await loadData();
     await updateNoteContents();
 
     resDisp = new Resources();
@@ -47,31 +68,7 @@ Hooks.on('renderCalendar', () => {
     calDisp.updateDisplay();
 });
 
-Hooks.on('updateJournalEntry', async (journal, data, opts, userId) => {
-    if (journal.data.name === "Starmap" && userId !== game.userId) {
-        let note = game.journal.entities.find((j) => j.data.name === "Starmap");
-        starmapSystems = note.getFlag("sfrpg-houserules-raavi", "starmapSystems");
-        starmapPlanets = note.getFlag("sfrpg-houserules-raavi", "starmapPlanets");
-        starmapConnections = note.getFlag("sfrpg-houserules-raavi", "starmapConnections");
-        jumpCost = note.getFlag("sfrpg-houserules-raavi", "jumpCost");
-        currentSystem = note.getFlag("sfrpg-houserules-raavi", "currentSystem");
-        starshipResources = note.getFlag("sfrpg-houserules-raavi", "starshipResources");
-        await refreshMap();
-        resDisp.updateDisplay();
-        calDisp.updateDisplay();
-    }
-});
-
-var starmapSystems;
-var starmapPlanets;
-var starmapConnections;
-var jumpCost;
-var currentSystem;
-var starshipResources;
-var jumpRange;
-var calendarDate;
-var fuelPerHour;
-var foodPerDay;
+const localData = {};
 
 var starMapCanvas;
 var starMapCoords;
@@ -114,17 +111,17 @@ async function makeMap() {
 }
 
 async function showSystem(systemId) {
-    let systemToShow = starmapSystems.find((s) => s.id === systemId);
+    let systemToShow = localData.starmapSystems.find((s) => s.id === systemId);
     let planetsInSystem;
 
     let template;
-    let systemTypeDisp = CONFIG.SFRPG.starTypes[systemToShow.type];
+    let systemTypeDisp = HRTABLES.starTypes[systemToShow.type];
     if (game.user.isGM) {
-        planetsInSystem = starmapPlanets.filter((p) => p.systemId === systemId);
+        planetsInSystem = localData.starmapPlanets.filter((p) => p.systemId === systemId);
         template = "modules/sfrpg-houserules-raavi/templates/system-gm.html";
     } else {
         if (systemToShow.known === 2) {
-            planetsInSystem = starmapPlanets.filter((p) => p.systemId === systemId && p.known > 0);
+            planetsInSystem = localData.starmapPlanets.filter((p) => p.systemId === systemId && p.known > 0);
         } else {
             planetsInSystem = [];
         }
@@ -140,8 +137,8 @@ async function showSystem(systemId) {
             }
         }
         newPlanet.years = Math.sqrt(Math.pow(newPlanet.orbit, 3)).toFixed(2);
-        newPlanet.type = CONFIG.SFRPG.planetTypes[p.type];
-        newPlanet.atmosphere = CONFIG.SFRPG.atmosTypes[p.atmosphere];
+        newPlanet.type = HRTABLES.planetTypes[p.type];
+        newPlanet.atmosphere = HRTABLES.atmosTypes[p.atmosphere];
         planetsDisplay.push(newPlanet);
     });
 
@@ -241,19 +238,18 @@ async function showSystem(systemId) {
 
 async function exploreSystem(systemId, level) {
     if (game.user.isGM) {
-        let modSys = starmapSystems.find((s) => s.id === systemId);
+        let modSys = localData.starmapSystems.find((s) => s.id === systemId);
         modSys.known = level;
         if (level < 2) {
-            let planetsInSystem = starmapPlanets.filter((p) => p.systemId === systemId);
+            let planetsInSystem = localData.starmapPlanets.filter((p) => p.systemId === systemId);
             planetsInSystem.forEach((p) => {
                 p.known = 1;
             });
         }
         await updateKnownConnections();
-        await updateNote("starmapSystems", starmapSystems);
-        await updateNote("starmapPlanets", starmapPlanets);
+        await updateDataInSettings("starmapSystems", localData.starmapSystems);
+        await updateDataInSettings("starmapPlanets", localData.starmapPlanets);
         await updateNoteContents();
-        await refreshMap();
     }
 }
 
@@ -261,25 +257,25 @@ async function moveShip(systemId, cost, direct) {
     if (game.user.isGM) {
         if (cost) {
             if (direct) {
-                let newSys = starmapSystems.find((s) => s.id === systemId);
-                let fuelCost = calcFuel(currentSystem, newSys, false, 2);
-                let distance = calcDistanceLY(currentSystem, newSys);
-                if (fuelCost > starshipResources.fuel.value) {
+                let newSys = localData.starmapSystems.find((s) => s.id === systemId);
+                let fuelCost = calcFuel(localData.currentSystem, newSys, false, 2);
+                let distance = calcDistanceLY(localData.currentSystem, newSys);
+                if (fuelCost > localData.starshipResources.fuel.value) {
                     ui.notifications.error("Jump fuel cost " + fuelCost + " is above available fuel");
                     return;
                 }
-                if (distance > jumpRange) {
+                if (distance > localData.jumpRange) {
                     ui.notifications.error("Jump is above maximum jump range");
                     return;
                 }
                 await performMoveShip(newSys, fuelCost, 0);
             } else {
                 let jumpResult = calcRouteToSystem(systemId, false);
-                if (jumpResult.fuel > starshipResources.fuel.value) {
+                if (jumpResult.fuel > localData.starshipResources.fuel.value) {
                     ui.notifications.error("Jump fuel cost " + jumpResult.fuel + " is above available fuel");
                     return;
                 }
-                if (jumpResult.credits > starshipResources.credits.value) {
+                if (jumpResult.credits > localData.starshipResources.credits.value) {
                     ui.notifications.error("Jump credits cost " + jumpResult.credits + " is above available credits");
                     return;
                 }
@@ -287,45 +283,40 @@ async function moveShip(systemId, cost, direct) {
                     ui.notifications.error("At least one jump is above maximum jump range");
                     return;
                 }
-                let newSys = starmapSystems.find((s) => s.id === systemId);
+                let newSys = localData.find((s) => s.id === systemId);
                 await performMoveShip(newSys, jumpResult.fuel, jumpResult.credits);
             }
         } else {
-            let newSys = starmapSystems.find((s) => s.id === systemId);
+            let newSys = localData.starmapSystems.find((s) => s.id === systemId);
             await performMoveShip(newSys, 0, 0);
         }
     }
 }
 
 async function performMoveShip(newSys, fuelCost, creditsCost) {
-    newSys.known = 2;
-    currentSystem = newSys;
+    await exploreSystem(newSys.id, 2);
+    localData.currentSystem = newSys;
     if (fuelCost > 0 || creditsCost > 0) {
-        starshipResources.fuel.value = starshipResources.fuel.value - fuelCost;
-        starshipResources.credits.value = starshipResources.credits.value - creditsCost;
-        await updateNote("starshipResources", starshipResources);
-        resDisp.updateDisplay();
+        localData.starshipResources.fuel.value -= fuelCost;
+        localData.starshipResources.credits.value -= creditsCost;
+        await updateDataInSettings("starshipResources", localData.starshipResources);
     }
-    await updateKnownConnections();
-    await updateNote("starmapSystems", starmapSystems);
-    await updateNote("currentSystem", currentSystem);
+
+    await updateDataInSettings("currentSystem", localData.currentSystem);
     await updateNoteContents();
-    await refreshMap();
 }
 
 async function probeSystem(systemId, all) {
     if (game.user.isGM) {
-        let planetsInSystem = starmapPlanets.filter((p) => p.systemId === systemId);
+        let planetsInSystem = localData.starmapPlanets.filter((p) => p.systemId === systemId);
         planetsInSystem.forEach((p) => {
-            if (p.specials === undefined || p.specials === null || p.specials === "" || (all && starshipResources.probes > 0)) {
-                starshipResources.probes = parseInt(starshipResources.probes) - probePlanet(p);
+            if (p.specials === undefined || p.specials === null || p.specials === "" || (all && localData.starshipResources.probes > 0)) {
+                localData.starshipResources.probes = parseInt(localData.starshipResources.probes) - probePlanet(p);
             }
         });
-        await updateNote("starmapPlanets", starmapPlanets);
-        await updateNote("starshipResources", starshipResources);
+        await updateDataInSettings("starmapPlanets", localData.starmapPlanets);
+        await updateDataInSettings("starshipResources", localData.starshipResources);
         await updateNoteContents();
-        await refreshMap();
-        resDisp.updateDisplay();
     }
 }
 
@@ -351,13 +342,13 @@ function probePlanet(planet) {
 }
 
 async function editPlanet(planetId) {
-    let planetToEdit = starmapPlanets.find((p) => p.planetId === planetId);
+    let planetToEdit = localData.starmapPlanets.find((p) => p.planetId === planetId);
 
     let dialogContent = await renderTemplate("modules/sfrpg-houserules-raavi/templates/planet-editor.html",
                 {
                     planet: planetToEdit,
-                    types: CONFIG.SFRPG.planetTypes,
-                    atmospheres: CONFIG.SFRPG.atmosTypes
+                    types: HRTABLES.planetTypes,
+                    atmospheres: HRTABLES.atmosTypes
                 });
 
     let update = false;
@@ -387,7 +378,7 @@ async function editPlanet(planetId) {
 
 async function updatePlanet(html) {
     let planetId = parseInt(html.find('[id=planet-id]')[0].value);
-    let planetToEdit = starmapPlanets.find((p) => p.planetId === planetId);
+    let planetToEdit = localData.starmapPlanets.find((p) => p.planetId === planetId);
 
     if (planetToEdit !== undefined && planetToEdit !== null) {
         let planetName = html.find('[id=planet-name]')[0].value;
@@ -415,11 +406,11 @@ async function updatePlanet(html) {
             if (planetType < 5) {
                 let roll = new Roll("1d5");
                 roll.evaluate();
-                planetToEdit.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + CONFIG.SFRPG.planetImgPrefixes[planetType] + roll.total + ".png";
+                planetToEdit.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + HRTABLES.planetImgPrefixes[planetType] + roll.total + ".png";
             } else if (planetType < 8) {
                 let roll = new Roll("1d3");
                 roll.evaluate();
-                planetToEdit.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + CONFIG.SFRPG.planetImgPrefixes[planetType] + roll.total + ".png";
+                planetToEdit.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + HRTABLES.planetImgPrefixes[planetType] + roll.total + ".png";
             } else {
                 planetToEdit.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-Rainbow1.png"
             }
@@ -438,44 +429,92 @@ async function updatePlanet(html) {
         planetToEdit.specials = planetSpecials;
         planetToEdit.gmNotes = planetGmNotes;
 
-        await updateNote("starmapPlanets", starmapPlanets);
+        await updateDataInSettings("starmapPlanets", localData.starmapPlanets);
         await updateNoteContents();
     }
 }
 
-async function updateNote(type, data) {
-    let note = game.journal.entities.find((j) => j.data.name === "Starmap");
-    let oldData = note.getFlag("sfrpg-houserules-raavi", type);
-    if (oldData !== data) {
-        await note.unsetFlag("sfrpg-houserules-raavi", type);
-        await note.setFlag("sfrpg-houserules-raavi", type, data);
+async function updateDataInSettings(type, data) {
+    let contents = game.settings.get("sfrpg-houserules-raavi", type);
+    let oldData = "";
+    if (contents !== undefined) {
+        oldData = JSON.parse(JSON.stringify(contents));
+    }
+    if (contents === undefined || oldData !== data) {
+        await game.settings.set("sfrpg-houserules-raavi", type, data);
     }
 }
 
-async function getNoteContents(note, type, defaultData) {
-    let data = note.getFlag("sfrpg-houserules-raavi", type);
-    if (data === undefined || data === null) {
-        await note.setFlag("sfrpg-houserules-raavi", type, defaultData);
-        return defaultData;
+async function getDataFromSettings(type) {
+    if (game.settings.get("sfrpg-houserules-raavi", type) === undefined || game.settings.get("sfrpg-houserules-raavi", type) === null) {
+        await game.settings.set("sfrpg-houserules-raavi", type, DEFAULT[type]);
+        return JSON.parse(JSON.stringify(DEFAULT[type]));
     }
-    return data;
+    return JSON.parse(JSON.stringify(game.settings.get("sfrpg-houserules-raavi", type)));
+}
+
+async function loadData() {
+    localData.starmapSystems =        await getDataFromSettings("starmapSystems");
+    localData.starmapPlanets =        await getDataFromSettings("starmapPlanets");
+    localData.starmapConnections =    await getDataFromSettings("starmapConnections");
+    localData.jumpCost =              await getDataFromSettings("jumpCost");
+    localData.jumpRange =             await getDataFromSettings("jumpRange");
+    localData.currentSystem =         await getDataFromSettings("currentSystem");
+    localData.starshipResources =     await getDataFromSettings("starshipResources");
+    localData.calendarDate = new Date(await getDataFromSettings("calendarDate"));
+    localData.fuelPerHour =           await getDataFromSettings("fuelPerHour");
+    localData.foodPerDay =            await getDataFromSettings("foodPerDay");
+
+    if (game.user.isGM) {
+        await convertStarmapPlanets();
+    }
+}
+
+async function migrateFromFlagsToSettings() {
+    let note = game.journal.entities.find((j) => j.data.name === "Starmap");
+
+    localData.starmapSystems =        await getOldFlagAndUnset(note, "starmapSystems");
+    localData.starmapPlanets =        await getOldFlagAndUnset(note, "starmapPlanets");
+    localData.starmapConnections =    await getOldFlagAndUnset(note, "starmapConnections");
+    localData.jumpCost =              await getOldFlagAndUnset(note, "jumpCost");
+    localData.jumpRange =             await getOldFlagAndUnset(note, "jumpRange");
+    localData.currentSystem =         await getOldFlagAndUnset(note, "currentSystem");
+    localData.starshipResources =     await getOldFlagAndUnset(note, "starshipResources");
+    localData.calendarDate = new Date(await getOldFlagAndUnset(note, "calendarDate"));
+    localData.fuelPerHour =           await getOldFlagAndUnset(note, "fuelPerHour");
+    localData.foodPerDay =            await getOldFlagAndUnset(note, "foodPerDay");
+
+    await convertStarmapPlanets();
+}
+
+async function getOldFlagAndUnset(note, type) {
+    let flag = note.getFlag("sfrpg-houserules-raavi", type);
+    if (flag !== undefined  && flag !== null) {
+        let result = JSON.parse(JSON.stringify(flag));
+        await note.unsetFlag("sfrpg-houserules-raavi", type);
+        await updateDataInSettings(result, type);
+        return result;
+    } else {
+        await updateDataInSettings(DEFAULT[type], type);
+        return JSON.parse(JSON.stringify(DEFAULT[type]));
+    }
 }
 
 async function updateNoteContents() {
     let note = game.journal.entities.find((j) => j.data.name === "Starmap");
     let template = "modules/sfrpg-houserules-raavi/templates/note-content.html";
     let systemsToShow = [];
-    starmapSystems.forEach(sys => {
+    localData.starmapSystems.forEach(sys => {
         if (sys.known > 0) {
-            let planetsInSystem = starmapPlanets.filter((p) => p.systemId === sys.id);
+            let planetsInSystem = localData.starmapPlanets.filter((p) => p.systemId === sys.id);
             let resourcesInSystem = ["❌", "❌", "❌", "❌"];
             let specialsInSystem = 0;
             let planetsInSystemTotal = planetsInSystem.length;
             let sysOwner = "❓";
             let sysOwnerColor = "#FFFFFF";
             if (sys.known === 2) {
-                sysOwner = CONFIG.SFRPG.raceNames[sys.owner];
-                sysOwnerColor = "#" + CONFIG.SFRPG.starmapColors[sys.owner];
+                sysOwner = HRTABLES.raceNames[sys.owner];
+                sysOwnerColor = "#" + HRTABLES.starmapColors[sys.owner];
                 planetsInSystem.forEach((p) => {
                     if (p.known > 0) {
                         if (p.organics > 0) {
@@ -544,7 +583,7 @@ function calcFuel(sys1, sys2, ignoreOwner, modifier) {
     if (!ignoreOwner && sys1.owner !== 0 && sys2.owner !== 0 && (sys1.owner === sys2.owner || sys1.contestant === sys2.owner || sys1.owner === sys2.contestant)) {
         return 0;
     } else {
-        return Math.ceil(calcDistanceLY(sys1, sys2) * jumpCost * modifier);
+        return Math.ceil(calcDistanceLY(sys1, sys2) * localData.jumpCost * modifier);
     }
 }
 
@@ -572,30 +611,30 @@ function calcDistance(source, dest) {
 function calcRouteToSystem(sysId, display) {
     let knownSystems = {};
     if (game.user.isGM) {
-        knownSystems = starmapSystems;
+        knownSystems = localData.starmapSystems;
     } else {
-        knownSystems = starmapSystems.filter((s) => s.known > 0);
+        knownSystems = localData.starmapSystems.filter((s) => s.known > 0);
     }
     let destSystem = knownSystems.find((s) => s.id === sysId);
 
-    if (destSystem === undefined || destSystem === null || sysId === currentSystem.id) {
+    if (destSystem === undefined || destSystem === null || sysId === localData.currentSystem.id) {
         return;
     }
 
-    let routePlotted = dijkstra(generateRouteTable(knownSystems), currentSystem.id, destSystem.id);
+    let routePlotted = dijkstra(generateRouteTable(knownSystems), localData.currentSystem.id, destSystem.id);
     let beyondMax = false;
 
-    let sys1 = currentSystem;
+    let sys1 = localData.currentSystem;
     let creditCost = 0;
     let fuelCost = 0;
     routePlotted.path.forEach(node => {
-        if (parseInt(node) === currentSystem.id) {
+        if (parseInt(node) === localData.currentSystem.id) {
             return;
         }
         let sys2 = knownSystems.find((s) => s.id === parseInt(node));
         let dist = calcDistanceLY(sys1, sys2);
         if (sys1.owner !== 0 && sys2.owner !== 0 && (sys1.owner === sys2.owner || sys1.contestant === sys2.owner || sys1.owner === sys2.contestant)) {
-            creditCost = creditCost + CONFIG.SFRPG.jumpGateCosts[sys2.owner];
+            creditCost = creditCost + HRTABLES.jumpGateCosts[sys2.owner];
             dist = 0;
         } else {
             if (routePlotted.distance !== "Infinity") {
@@ -604,11 +643,11 @@ function calcRouteToSystem(sysId, display) {
                 fuelCost = fuelCost + calcFuel(sys1, sys2, false, 2);
             }
         }
-        if (dist > jumpRange) {
+        if (dist > localData.jumpRange) {
             beyondMax = true;
         }
         if (display) {
-            let line = makeJumpLine([sys1.cx, sys1.cy, sys2.cx, sys2.cy], dist > jumpRange);
+            let line = makeJumpLine([sys1.cx, sys1.cy, sys2.cx, sys2.cy], dist > localData.jumpRange);
             starMapCanvas.add(line);
         }
         sys1 = sys2;
@@ -621,12 +660,12 @@ function calcRouteToSystem(sysId, display) {
 }
 
 async function renderSystemsGM() {
-    starmapSystems.forEach(system => {
+    localData.starmapSystems.forEach(system => {
         if (system.cx > 0 && system.cy > 0) {
             let contestant = null;
-            let owner = "#" + CONFIG.SFRPG.starmapColors[system.owner];
+            let owner = "#" + HRTABLES.starmapColors[system.owner];
             if (system.contestant > 0) {
-                contestant = CONFIG.SFRPG.starmapColors[system.contestant];
+                contestant = HRTABLES.starmapColors[system.contestant];
             }
             let sys;
             if (system.known === 0) {
@@ -642,19 +681,23 @@ async function renderSystemsGM() {
 }
 
 async function renderJumpLinesGM() {
-    starmapConnections.forEach(conn => {
-        let connection = makeLine([conn.sys1cx, conn.sys1cy, conn.sys2cx, conn.sys2cy], conn.known);
+    localData.starmapConnections.forEach(conn => {
+        let colorFill = "#FF00FF";
+        if (conn.known) {
+            colorFill = "#FFFF00";
+        }
+        let connection = makeLine([conn.sys1cx, conn.sys1cy, conn.sys2cx, conn.sys2cy], colorFill);
         starMapCanvas.add(connection);
     });
 }
 
 async function renderSystemsPlayer() {
-    starmapSystems.forEach(system => {
+    localData.starmapSystems.forEach(system => {
         if (system.cx > 0 && system.cy > 0 && system.known > 0) {
             let contestant = null;
-            let owner = "#" + CONFIG.SFRPG.starmapColors[system.owner];
+            let owner = "#" + HRTABLES.starmapColors[system.owner];
             if (system.contestant > 0) {
-                contestant = CONFIG.SFRPG.starmapColors[system.contestant];
+                contestant = HRTABLES.starmapColors[system.contestant];
             }
             let sys;
             if (system.known === 0) {
@@ -670,74 +713,53 @@ async function renderSystemsPlayer() {
 }
 
 async function renderJumpLinesPlayer() {
-    starmapConnections.forEach(conn => {
+    localData.starmapConnections.forEach(conn => {
         if (conn.known) {
-            let connection = makeLine([conn.sys1cx, conn.sys1cy, conn.sys2cx, conn.sys2cy], conn.known);
+            let connection = makeLine([conn.sys1cx, conn.sys1cy, conn.sys2cx, conn.sys2cy], "#FFFF00");
             starMapCanvas.add(connection);
         }
     });
 }
 
 async function updateKnownConnections() {
-    starmapConnections.forEach(conn => {
-        let sys1 = starmapSystems.find((s) => s.id === conn.sys1);
-        let sys2 = starmapSystems.find((s) => s.id === conn.sys2);
+    localData.starmapConnections.forEach(conn => {
+        let sys1 = localData.starmapSystems.find((s) => s.id === conn.sys1);
+        let sys2 = localData.starmapSystems.find((s) => s.id === conn.sys2);
         conn.known = sys1.known > 0 && sys2.known > 0;
     });
 
-    await updateNote("starmapConnections", starmapConnections);
+    await updateDataInSettings("starmapConnections", localData.starmapConnections);
 }
 
-function convertStarmapPlanets() {
-    starmapPlanets.forEach((p) => {
+async function convertStarmapPlanets() {
+    localData.starmapPlanets.forEach((p) => {
         //add image
-        if (p.type < 5) {
-            let roll = new Roll("1d5");
-            roll.evaluate();
-            p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + CONFIG.SFRPG.planetImgPrefixes[p.type] + roll.total + ".png";
-        } else if (p.type < 8) {
-            let roll = new Roll("1d3");
-            roll.evaluate();
-            p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + CONFIG.SFRPG.planetImgPrefixes[p.type] + roll.total + ".png";
-        } else {
-            p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-Rainbow1.png"
+        if (p.image === undefined || p.image === null) {
+            if (p.type < 5) {
+                let roll = new Roll("1d5");
+                roll.evaluate();
+                p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + HRTABLES.planetImgPrefixes[p.type] + roll.total + ".png";
+            } else if (p.type < 8) {
+                let roll = new Roll("1d3");
+                roll.evaluate();
+                p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-" + HRTABLES.planetImgPrefixes[p.type] + roll.total + ".png";
+            } else {
+                p.image = "modules/sfrpg-houserules-raavi/images/planets/Planet-Rainbow1.png"
+            }
         }
 
         if (p.specials !== undefined && p.specials !== null && p.specials !== "") {
-            p.specials = p.specials.split(";");
+            if (!Array.isArray(p.specials)) {
+                p.specials = p.specials.split(";");
+            }
         } else {
             p.specials = ["BRAK"];
         }
     });
+
+    await updateDataInSettings("starmapPlanets", localData.starmapPlanets);
 }
 
-
-function generateCanvasContents() {
-    starMapCoords = createText(1070, 819);
-    starMapCanvas.add(starMapCoords);
-    starMapSysName = createText(1070, 799);
-    starMapCanvas.add(starMapSysName);
-
-    starMapFuelCost = createText(1070, 759);
-    starMapFuelCost.text = '';
-    starMapFuelCost.fill = '#FF0000';
-    starMapCanvas.add(starMapFuelCost);
-    starMapCreditCost = createText(1070, 779);
-    starMapCreditCost.text = '';
-    starMapCreditCost.fill = '#00FF00';
-    starMapCanvas.add(starMapCreditCost);
-
-    let shiplineX = makeLine([currentSystem.cx, 0, currentSystem.cx, 828], true);
-    shiplineX.stroke = '#FF0000';
-    shiplineX.strokeWidth = 1;
-    starMapCanvas.add(shiplineX);
-    let shiplineY = makeLine([0, currentSystem.cy, 1080, currentSystem.cy], true);
-    shiplineY.stroke = '#FF0000';
-    shiplineY.strokeWidth = 1;
-    starMapCanvas.add(shiplineY);
-}
-
-// Fabric helpers
 async function createStarMapCanvas() {
     starMapCanvas = new fabric.Canvas('mapcanvas');
     starMapCanvas.on('mouse:move', function (e) {
@@ -747,8 +769,6 @@ async function createStarMapCanvas() {
         selectSystem(e);
     });
     generateCanvasContents();
-
-    await updateKnownConnections();
 
     if (game.user.isGM) {
         await renderSystemsGM();
@@ -773,195 +793,4 @@ async function refreshMap() {
         await renderSystemsPlayer();
         await renderJumpLinesPlayer();
     }
-}
-
-function makeLine(starMapCoords, known) {
-    let colorFill = '#FF00FF';
-    if (known) {
-        colorFill = '#FFFF00';
-    }
-    return new fabric.Line(starMapCoords, {
-        fill: colorFill,
-        stroke: colorFill,
-        strokeWidth: 3,
-        selectable: false,
-        evented: false,
-        originX: 'center',
-        originY: 'center'
-    });
-}
-
-function makeJumpLine(starMapCoords, aboveMax) {
-    let colorFill = '#00FF00';
-    if (aboveMax) {
-        colorFill = '#FF0000';
-    }
-    return new fabric.Line(starMapCoords, {
-        fill: colorFill,
-        stroke: colorFill,
-        strokeWidth: 4,
-        selectable: false,
-        evented: false,
-        originX: 'center',
-        originY: 'center',
-        jump: true
-    });
-}
-
-function makeTargetLine(starMapCoords) {
-    return new fabric.Line(starMapCoords, {
-        fill: '#00FF00',
-        stroke: '#00FF00',
-        strokeWidth: 1,
-        selectable: false,
-        evented: false,
-        originX: 'center',
-        originY: 'center'
-    });
-}
-
-function makeCircle(x, y, owner, contestant, systemid, systemname) {
-    let tmp = new fabric.Circle({
-        radius: 15,
-        fill: owner,
-        strokeWidth: 1,
-        stroke: '#FF0000',
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        top: y,
-        left: x,
-        systemname: systemname,
-        systemid: systemid,
-        hoverCursor: 'pointer'
-    });
-    if (contestant != null) {
-        tmp.setGradient('fill', {
-            x1: 0,
-            y1: 0,
-            x2: tmp.width,
-            y2: 0,
-            colorStops: {
-                0: owner,
-                0.5: owner,
-                0.51: contestant,
-                1: contestant
-            }
-        });
-    }
-    return tmp;
-}
-
-function makePolygon(x, y, owner, contestant, systemid, systemname, sides) {
-    let points = regularPolygonPoints(sides, 17);
-
-    let tmp = new fabric.Polygon(points, {
-        stroke: '#FF0000',
-        fill: owner,
-        left: x,
-        top: y,
-        strokeWidth: 1,
-        strokeLineJoin: 'bevil',
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        systemname: systemname,
-        systemid: systemid,
-        hoverCursor: 'pointer'
-    }, false);
-
-    if (contestant != null) {
-        tmp.setGradient('fill', {
-            x1: 0,
-            y1: 0,
-            x2: tmp.width,
-            y2: 0,
-            colorStops: {
-                0: owner,
-                0.5: owner,
-                0.51: contestant,
-                1: contestant
-            }
-        });
-    }
-
-    return tmp;
-}
-
-function regularPolygonPoints(sideCount, radius) {
-    let sweep = Math.PI * 2 / sideCount;
-    let cx = radius;
-    let cy = radius;
-    let points = [];
-    for (let i = 0; i < sideCount; i++) {
-        let x = cx + radius * Math.cos(i * sweep);
-        let y = cy + radius * Math.sin(i * sweep);
-        points.push({
-            x: x,
-            y: y
-        });
-    }
-    return (points);
-}
-
-function createText(x, y) {
-    return new fabric.Text('', {
-        left: x,
-        top: y,
-        fontFamily: 'Lucida Console',
-        textAlign: 'right',
-        originX: 'right',
-        originY: 'bottom',
-        fontSize: 20,
-        fill: '#FFFFFF',
-        selectable: false
-    });
-}
-
-function updatestarMapCoords(e) {
-    if (e.target != null && e.target.systemname != null) {
-        let x = e.target.getCenterPoint().x;
-        let y = e.target.getCenterPoint().y;
-        starMapCoords.text = x + ';' + y;
-        if (game.user.isGM) {
-            starMapSysName.text = e.target.systemname + ' [' + e.target.systemid + ']';
-        } else {
-            starMapSysName.text = e.target.systemname;
-        }
-
-
-        removeJumpLines();
-        calcRouteToSystem(e.target.systemid, true);
-        starMapCanvas.remove(selSysX);
-        starMapCanvas.remove(selSysY);
-        selSysX = makeTargetLine([x, 0, x, 828]);
-        selSysY = makeTargetLine([0, y, 1080, y]);
-        starMapCanvas.add(selSysX);
-        starMapCanvas.add(selSysY);
-        starMapCanvas.renderAll();
-    } else {
-        let x = e.e.layerX;
-        let y = e.e.layerY;
-        starMapCoords.text = x + ';' + y;
-        starMapSysName.text = '';
-        starMapFuelCost.text = '';
-        starMapCreditCost.text = '';
-    }
-    starMapCanvas.renderAll();
-}
-
-async function selectSystem(e) {
-    if (e.target != null && e.target.systemid != null) {
-        await showSystem(e.target.systemid);
-    }
-}
-
-function removeJumpLines() {
-    let objects = starMapCanvas.getObjects('line');
-    for (let i in objects) {
-        if (objects[i].jump === true) {
-            starMapCanvas.remove(objects[i]);
-        }
-    }
-    starMapCanvas.renderAll();
 }

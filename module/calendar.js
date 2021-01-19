@@ -87,42 +87,40 @@ class Calendar extends Application {
         let dateElement = document.getElementById("calendar-date");
         let timeElement = document.getElementById("calendar-time");
 
-        dateElement.innerHTML = this.zeroFill(calendarDate.getUTCDate(), 2) + "-" +
-                                this.zeroFill(calendarDate.getUTCMonth() + 1, 2) + "-" +
-                                this.zeroFill(calendarDate.getUTCFullYear(), 4);
+        dateElement.innerHTML = this.zeroFill(localData.calendarDate.getUTCDate(), 2) + "-" +
+                                this.zeroFill(localData.calendarDate.getUTCMonth() + 1, 2) + "-" +
+                                this.zeroFill(localData.calendarDate.getUTCFullYear(), 4);
 
-        timeElement.innerHTML = this.zeroFill(calendarDate.getUTCHours(), 2) + ":" +
-                                this.zeroFill(calendarDate.getUTCMinutes(), 2);
+        timeElement.innerHTML = this.zeroFill(localData.calendarDate.getUTCHours(), 2) + ":" +
+                                this.zeroFill(localData.calendarDate.getUTCMinutes(), 2);
     }
 
     async updateCalendar(calModifier) {
         if (!game.user.isGM) {
             return;
         }
-        let currentDay = parseInt(calendarDate.getUTCDay().toString());
-        calendarDate.setUTCHours(calendarDate.getUTCHours() + parseInt(calModifier));
-        let newDay = parseInt(calendarDate.getUTCDay().toString());
-        starshipResources.fuel.value -= fuelPerHour * calModifier;
-        if (starshipResources.fuel.value <= 0) {
+        let currentDay = parseInt(localData.calendarDate.getUTCDay().toString());
+        localData.calendarDate.setUTCHours(localData.calendarDate.getUTCHours() + parseInt(calModifier));
+        let newDay = parseInt(localData.calendarDate.getUTCDay().toString());
+        localData.starshipResources.fuel.value -= localData.fuelPerHour * calModifier;
+        if (localData.starshipResources.fuel.value <= 0) {
             ui.notifications.error("WARNING! Out of fuel!");
-            starshipResources.fuel.value = 0;
+            localData.starshipResources.fuel.value = 0;
         }
         if (currentDay !== newDay) {
             if (calModifier > 0) {
-                ui.notifications.info("It's a brand new day! Food consumed: " + foodPerDay);
-                starshipResources.food.value -= foodPerDay;
-                if (starshipResources.food.value <= 0) {
+                ui.notifications.info("It's a brand new day! Food consumed: " + localData.foodPerDay);
+                localData.starshipResources.food.value -= localData.foodPerDay;
+                if (localData.starshipResources.food.value <= 0) {
                     ui.notifications.error("WARNING! Out of food!");
-                    starshipResources.food.value = 0;
+                    localData.starshipResources.food.value = 0;
                 }
             } else {
-                starshipResources.food.value += foodPerDay;
+                localData.starshipResources.food.value += localData.foodPerDay;
             }
         }
-        await updateNote("calendarDate", calendarDate.toISOString());
-        await updateNote("starshipResources", starshipResources);
-        this.updateDisplay();
-        resDisp.updateDisplay();
+        await updateDataInSettings("calendarDate", localData.calendarDate.toISOString());
+        await updateDataInSettings("starshipResources", localData.starshipResources);
     }
 
     toObject() {
@@ -131,17 +129,17 @@ class Calendar extends Application {
         };
     }
 
-    activateListeners(html) {
+    async activateListeners(html) {
         const displays = '.calendar-button';
         const calendarMove = '#calendar-move';
 
         if (game.user.isGM) {
-            html.find(displays).click(ev => {
+            html.find(displays).click(async ev => {
                 ev.preventDefault();
                 if (game.user.isGM) {
                     let calModifier = ev.target.dataset.calmodifier;
                     if (calModifier !== undefined && calModifier !== null) {
-                        this.updateCalendar(calModifier);
+                        await this.updateCalendar(calModifier);
                     }
                 }
             });

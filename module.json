@@ -2,7 +2,7 @@
   "name": "sfrpg-houserules-raavi",
   "title": "Starfinder Houserules Raavi",
   "description": "Houserules for Starfinder",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "minimumCoreVersion": "0.6.4",
   "compatibleCoreVersion": "0.7.9",
   "author": "Raavi#3926",
@@ -15,7 +15,9 @@
     "path": "languages/en.json"
   }],
 
-  "scripts": ["module/fabric.js",
+  "scripts": ["module/customData.js",
+              "module/fabric.js",
+              "module/fabricHelper.js",
               "module/dijkstra.js",
               "module/applyDamageToShips.js",
               "module/starmap.js",
