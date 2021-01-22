@@ -283,7 +283,7 @@ async function moveShip(systemId, cost, direct) {
                     ui.notifications.error("At least one jump is above maximum jump range");
                     return;
                 }
-                let newSys = localData.find((s) => s.id === systemId);
+                let newSys = localData.starmapSystems.find((s) => s.id === systemId);
                 await performMoveShip(newSys, jumpResult.fuel, jumpResult.credits);
             }
         } else {
@@ -492,10 +492,10 @@ async function getOldFlagAndUnset(note, type) {
     if (flag !== undefined  && flag !== null) {
         let result = JSON.parse(JSON.stringify(flag));
         await note.unsetFlag("sfrpg-houserules-raavi", type);
-        await updateDataInSettings(result, type);
+        await updateDataInSettings(type, result);
         return result;
     } else {
-        await updateDataInSettings(DEFAULT[type], type);
+        await updateDataInSettings(type, DEFAULT[type]);
         return JSON.parse(JSON.stringify(DEFAULT[type]));
     }
 }

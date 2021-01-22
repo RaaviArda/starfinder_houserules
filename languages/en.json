@@ -18,85 +18,6 @@
             "Battle":"Battleship",
             "Dread":"Dreadnought"
          },
-         "DriftEngineSystems":{
-            "Basic":"Basic 6 LY",
-            "Booster":"Basic 7 LY",
-            "Major":"Fast 7 LY",
-            "Superior":"Econo 7 LY",
-            "Ultra":"Advanced 9 LY"
-         },
-         "ExpansionBaySystems":{
-            "Med"     : "Medical bay",
-            "MedA"    : "Advanced medical bay",
-            "Hosp"    : "Hospital bay",
-            "Cargo"   : "Cargo hold",
-            "Fuel"    : "Fuel tank",
-            "Science" : "Science lab",
-            "Tech"    : "Tech workshop",
-            "GarageM" : "Garage (M)",
-            "GarageL" : "Garage (L)",
-            "HangarM" : "Hangar bay (M)",
-            "HangarL" : "Hangar bay (L)",
-            "Hydro1"  : "Hydroponics Mark I",
-            "Hydro2"  : "Hydroponics Mark II",
-            "Hydro3"  : "Hydroponics Mark III"
-         },
-         "PowerCoreSystems":{
-            "SH1"  : "Shuttle Mark I",
-            "SH2"  : "Shuttle Mark II",
-            "SH3"  : "Shuttle Mark III",
-            "FR1"  : "Frigate Mark I",
-            "FR2"  : "Frigate Mark II",
-            "FR3"  : "Frigate Mark III",
-            "DE1"  : "Destroyer Mark I",
-            "DE2"  : "Destroyer Mark II",
-            "DE3"  : "Destroyer Mark III",
-            "CR1"  : "Cruiser Mark I",
-            "CR2"  : "Cruiser Mark II",
-            "CR3"  : "Cruiser Mark III",
-            "ECR1" : "Cruiser Mark I (E)",
-            "ECR2" : "Cruiser Mark II (E)",
-            "ECR3" : "Cruiser Mark III (E)",
-            "BC1"  : "Battlecruiser Mark I",
-            "BC2"  : "Battlecruiser Mark II",
-            "BC3"  : "Battlecruiser Mark III",
-            "EBC1" : "Battlecruiser Mark I (E)",
-            "EBC2" : "Battlecruiser Mark II (E)",
-            "EBC3" : "Battlecruiser Mark III (E)",
-            "BS1"  : "Battleship Mark I",
-            "BS2"  : "Battleship Mark II",
-            "BS3"  : "Battleship Mark III",
-            "CAP1" : "Capital Mark I",
-            "CAP2" : "Capital Mark II",
-            "SCAP1": "Supercapital Mark I",
-            "SCAP2": "Supercapital Mark II",
-
-            "2FR1"  : "2x Frigate Mark I",
-            "2FR2"  : "2x Frigate Mark II",
-            "2FR3"  : "2x Frigate Mark III",
-            "2DE1"  : "2x Destroyer Mark I",
-            "2DE2"  : "2x Destroyer Mark II",
-            "2DE3"  : "2x Destroyer Mark III",
-            "2CR1"  : "2x Cruiser Mark I",
-            "2CR2"  : "2x Cruiser Mark II",
-            "2CR3"  : "2x Cruiser Mark III",
-            "2ECR1" : "2x Cruiser Mark I (E)",
-            "2ECR2" : "2x Cruiser Mark II (E)",
-            "2ECR3" : "2x Cruiser Mark III (E)",
-            "2BC1"  : "2x Battlecruiser Mark I",
-            "2BC2"  : "2x Battlecruiser Mark II",
-            "2BC3"  : "2x Battlecruiser Mark III",
-            "2EBC1" : "2x Battlecruiser Mark I (E)",
-            "2EBC2" : "2x Battlecruiser Mark II (E)",
-            "2EBC3" : "2x Battlecruiser Mark III (E)",
-            "2BS1"  : "2x Battleship Mark I",
-            "2BS2"  : "2x Battleship Mark II",
-            "2BS3"  : "2x Battleship Mark III",
-            "2CAP1" : "2x Capital Mark I",
-            "2CAP2" : "2x Capital Mark II",
-            "2SCAP1": "2x Supercapital Mark I",
-            "2SCAP2": "2x Supercapital Mark II"
-         },
          "Size":{
             "SH":"Shuttle",
             "FR":"Frigate",
@@ -106,30 +27,16 @@
             "BS":"Battleship",
             "CAP":"Capital",
             "SCAP":"Supercapital"
+         }
+      },
+      "StarshipSheet": {
+         "Attributes": {
+            "DriftRating": "Jump Range"
          },
-         "ThrusterSystems":{
-            "TSH1"  : "Shuttle Mark I",
-            "TSH2"  : "Shuttle Mark II",
-            "TSH3"  : "Shuttle Mark III",
-            "TFR1"  : "Frigate Mark I",
-            "TFR2"  : "Frigate Mark II",
-            "TFR3"  : "Frigate Mark III",
-            "TDE1"  : "Destroyer Mark I",
-            "TDE2"  : "Destroyer Mark II",
-            "TDE3"  : "Destroyer Mark III",
-            "TCR1"  : "Cruiser Mark I",
-            "TCR2"  : "Cruiser Mark II",
-            "TCR3"  : "Cruiser Mark III",
-            "TBC1"  : "Battlecruiser Mark I",
-            "TBC2"  : "Battlecruiser Mark II",
-            "TBC3"  : "Battlecruiser Mark III",
-            "TBS1"  : "Battleship Mark I",
-            "TBS2"  : "Battleship Mark II",
-            "TBS3"  : "Battleship Mark III",
-            "TCAP1" : "Capital Mark I",
-            "TCAP2" : "Capital Mark II",
-            "TSCAP1": "Supercapital Mark I",
-            "TSCAP2": "Supercapital Mark II"
+         "Features": {
+            "Prefixes": {
+               "StarshipDriftEngine" : "Jump Engine"
+            }
          }
       }
    }

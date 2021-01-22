@@ -18,63 +18,6 @@ SFRPG.starshipSizes = {
     "superColossal": "SFRPG.ShipSystems.Size.SCAP" //Supercarrier
 };
 
-SFRPG.powerCoreSystems = {
-    "SH1"  : "SFRPG.ShipSystems.PowerCoreSystems.SH1",
-    "SH2"  : "SFRPG.ShipSystems.PowerCoreSystems.SH2",
-    "SH3"  : "SFRPG.ShipSystems.PowerCoreSystems.SH3",
-    "FR1"  : "SFRPG.ShipSystems.PowerCoreSystems.FR1",
-    "FR2"  : "SFRPG.ShipSystems.PowerCoreSystems.FR2",
-    "FR3"  : "SFRPG.ShipSystems.PowerCoreSystems.FR3",
-    "DE1"  : "SFRPG.ShipSystems.PowerCoreSystems.DE1",
-    "DE2"  : "SFRPG.ShipSystems.PowerCoreSystems.DE2",
-    "DE3"  : "SFRPG.ShipSystems.PowerCoreSystems.DE3",
-    "CR1"  : "SFRPG.ShipSystems.PowerCoreSystems.CR1",
-    "CR2"  : "SFRPG.ShipSystems.PowerCoreSystems.CR2",
-    "CR3"  : "SFRPG.ShipSystems.PowerCoreSystems.CR3",
-    "ECR1" : "SFRPG.ShipSystems.PowerCoreSystems.ECR1",
-    "ECR2" : "SFRPG.ShipSystems.PowerCoreSystems.ECR2",
-    "ECR3" : "SFRPG.ShipSystems.PowerCoreSystems.ECR3",
-    "BC1"  : "SFRPG.ShipSystems.PowerCoreSystems.BC1",
-    "BC2"  : "SFRPG.ShipSystems.PowerCoreSystems.BC2",
-    "BC3"  : "SFRPG.ShipSystems.PowerCoreSystems.BC3",
-    "EBC1" : "SFRPG.ShipSystems.PowerCoreSystems.EBC1",
-    "EBC2" : "SFRPG.ShipSystems.PowerCoreSystems.EBC2",
-    "EBC3" : "SFRPG.ShipSystems.PowerCoreSystems.EBC3",
-    "BS1"  : "SFRPG.ShipSystems.PowerCoreSystems.BS1",
-    "BS2"  : "SFRPG.ShipSystems.PowerCoreSystems.BS2",
-    "BS3"  : "SFRPG.ShipSystems.PowerCoreSystems.BS3",
-    "CAP1" : "SFRPG.ShipSystems.PowerCoreSystems.CAP1",
-    "CAP2" : "SFRPG.ShipSystems.PowerCoreSystems.CAP2",
-    "SCAP1": "SFRPG.ShipSystems.PowerCoreSystems.SCAP1",
-    "SCAP2": "SFRPG.ShipSystems.PowerCoreSystems.SCAP2",
-    // Double
-    "2FR1"  : "SFRPG.ShipSystems.PowerCoreSystems.2FR1",
-    "2FR2"  : "SFRPG.ShipSystems.PowerCoreSystems.2FR2",
-    "2FR3"  : "SFRPG.ShipSystems.PowerCoreSystems.2FR3",
-    "2DE1"  : "SFRPG.ShipSystems.PowerCoreSystems.2DE1",
-    "2DE2"  : "SFRPG.ShipSystems.PowerCoreSystems.2DE2",
-    "2DE3"  : "SFRPG.ShipSystems.PowerCoreSystems.2DE3",
-    "2CR1"  : "SFRPG.ShipSystems.PowerCoreSystems.2CR1",
-    "2CR2"  : "SFRPG.ShipSystems.PowerCoreSystems.2CR2",
-    "2CR3"  : "SFRPG.ShipSystems.PowerCoreSystems.2CR3",
-    "2ECR1" : "SFRPG.ShipSystems.PowerCoreSystems.2ECR1",
-    "2ECR2" : "SFRPG.ShipSystems.PowerCoreSystems.2ECR2",
-    "2ECR3" : "SFRPG.ShipSystems.PowerCoreSystems.2ECR3",
-    "2BC1"  : "SFRPG.ShipSystems.PowerCoreSystems.2BC1",
-    "2BC2"  : "SFRPG.ShipSystems.PowerCoreSystems.2BC2",
-    "2BC3"  : "SFRPG.ShipSystems.PowerCoreSystems.2BC3",
-    "2EBC1" : "SFRPG.ShipSystems.PowerCoreSystems.2EBC1",
-    "2EBC2" : "SFRPG.ShipSystems.PowerCoreSystems.2EBC2",
-    "2EBC3" : "SFRPG.ShipSystems.PowerCoreSystems.2EBC3",
-    "2BS1"  : "SFRPG.ShipSystems.PowerCoreSystems.2BS1",
-    "2BS2"  : "SFRPG.ShipSystems.PowerCoreSystems.2BS2",
-    "2BS3"  : "SFRPG.ShipSystems.PowerCoreSystems.2BS3",
-    "2CAP1" : "SFRPG.ShipSystems.PowerCoreSystems.2CAP1",
-    "2CAP2" : "SFRPG.ShipSystems.PowerCoreSystems.2CAP2",
-    "2SCAP1": "SFRPG.ShipSystems.PowerCoreSystems.2SCAP1",
-    "2SCAP2": "SFRPG.ShipSystems.PowerCoreSystems.2SCAP2"
-};
-
 SFRPG.powercoreMap = {
     "SH1"  : { size: ["tiny"],          pcu: 70 },
     "SH2"  : { size: ["tiny"],          pcu: 80 },
@@ -132,31 +75,6 @@ SFRPG.powercoreMap = {
     "2SCAP2": { size: ["superColossal"], pcu: 2600 }
 };
 
-SFRPG.thrusterSystems = {
-    "TSH1"  : "SFRPG.ShipSystems.ThrusterSystems.TSH1",
-    "TSH2"  : "SFRPG.ShipSystems.ThrusterSystems.TSH2",
-    "TSH3"  : "SFRPG.ShipSystems.ThrusterSystems.TSH3",
-    "TFR1"  : "SFRPG.ShipSystems.ThrusterSystems.TFR1",
-    "TFR2"  : "SFRPG.ShipSystems.ThrusterSystems.TFR2",
-    "TFR3"  : "SFRPG.ShipSystems.ThrusterSystems.TFR3",
-    "TDE1"  : "SFRPG.ShipSystems.ThrusterSystems.TDE1",
-    "TDE2"  : "SFRPG.ShipSystems.ThrusterSystems.TDE2",
-    "TDE3"  : "SFRPG.ShipSystems.ThrusterSystems.TDE3",
-    "TCR1"  : "SFRPG.ShipSystems.ThrusterSystems.TCR1",
-    "TCR2"  : "SFRPG.ShipSystems.ThrusterSystems.TCR2",
-    "TCR3"  : "SFRPG.ShipSystems.ThrusterSystems.TCR3",
-    "TBC1"  : "SFRPG.ShipSystems.ThrusterSystems.TBC1",
-    "TBC2"  : "SFRPG.ShipSystems.ThrusterSystems.TBC2",
-    "TBC3"  : "SFRPG.ShipSystems.ThrusterSystems.TBC3",
-    "TBS1"  : "SFRPG.ShipSystems.ThrusterSystems.TBS1",
-    "TBS2"  : "SFRPG.ShipSystems.ThrusterSystems.TBS2",
-    "TBS3"  : "SFRPG.ShipSystems.ThrusterSystems.TBS3",
-    "TCAP1" : "SFRPG.ShipSystems.ThrusterSystems.TCAP1",
-    "TCAP2" : "SFRPG.ShipSystems.ThrusterSystems.TCAP2",
-    "TSCAP1": "SFRPG.ShipSystems.ThrusterSystems.TSCAP1",
-    "TSCAP2": "SFRPG.ShipSystems.ThrusterSystems.TSCAP2"
-};
-
 SFRPG.thrustersMap = {
     "TSH1"  : { speed: 10, mod: 0, pcu: 20 },
     "TSH2"  : { speed: 12, mod: 0, pcu: 25 },
@@ -183,51 +101,58 @@ SFRPG.thrustersMap = {
 };
 
 SFRPG.expansionBaySystems = {
-    "Med"     : "SFRPG.ShipSystems.ExpansionBaySystems.Med",
-    "MedA"    : "SFRPG.ShipSystems.ExpansionBaySystems.MedA",
-    "Hosp"    : "SFRPG.ShipSystems.ExpansionBaySystems.Hosp",
-    "Cargo"   : "SFRPG.ShipSystems.ExpansionBaySystems.Cargo",
-    "Fuel"    : "SFRPG.ShipSystems.ExpansionBaySystems.Fuel",
-    "Science" : "SFRPG.ShipSystems.ExpansionBaySystems.Science",
-    "Tech"    : "SFRPG.ShipSystems.ExpansionBaySystems.Tech",
-    "GarageM" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageM",
-    "GarageL" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageL",
-    "HangarM" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarM",
-    "HangarL" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarL",
-    "Hydro1"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro1",
-    "Hydro2"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro2",
-    "Hydro3"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro3",
+    "Med"     : "SFRPG.ShipSystems.ExpansionBaySystems.Med", // 15
+    "MedA"    : "SFRPG.ShipSystems.ExpansionBaySystems.MedA", // 20
+    "Hosp"    : "SFRPG.ShipSystems.ExpansionBaySystems.Hosp", // 30
+    "Cargo"   : "SFRPG.ShipSystems.ExpansionBaySystems.Cargo", // 0
+    "Fuel"    : "SFRPG.ShipSystems.ExpansionBaySystems.Fuel", // 0
+    "Science" : "SFRPG.ShipSystems.ExpansionBaySystems.Science", // 15
+    "Tech"    : "SFRPG.ShipSystems.ExpansionBaySystems.Tech", // 15
+    "GarageM" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageM", // 5
+    "GarageL" : "SFRPG.ShipSystems.ExpansionBaySystems.GarageL", // 10
+    "HangarM" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarM", // 30
+    "HangarL" : "SFRPG.ShipSystems.ExpansionBaySystems.HangarL", // 50
+    "Hydro1"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro1", // 35
+    "Hydro2"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro2", // 50
+    "Hydro3"  : "SFRPG.ShipSystems.ExpansionBaySystems.Hydro3", // 65
 };
 
-SFRPG.driftEngineMap = {
-    "basic": 6,
-    "booster": 7,
-    "major": 7,
-    "superior": 7,
-    "ultra": 9
-};
+//    "Med"     : "Medical bay",
+//    "MedA"    : "Advanced medical bay",
+//    "Hosp"    : "Hospital bay",
+//    "Cargo"   : "Cargo hold",
+//    "Fuel"    : "Fuel tank",
+//    "Science" : "Science lab",
+//    "Tech"    : "Tech workshop",
+//    "GarageM" : "Garage (M)",
+//    "GarageL" : "Garage (L)",
+//    "HangarM" : "Hangar bay (M)",
+//    "HangarL" : "Hangar bay (L)",
+//    "Hydro1"  : "Hydroponics I",
+//    "Hydro2"  : "Hydroponics II",
+//    "Hydro3"  : "Hydroponics III"
 
-SFRPG.shieldsPower = {
-    "10": 20,
-    "20": 40,
-    "30": 60,
-    "40": 80,
-    "50": 100,
-    "60": 120,
-    "70": 140,
-    "80": 160,
-    "90": 180,
-    "100": 200,
-    "120": 240,
-    "140": 280,
-    "160": 320,
-    "200": 400,
-    "240": 480,
-    "280": 560,
-    "320": 640,
-    "360": 720,
-    "420": 840,
-    "480": 960,
-    "540": 1080,
-    "600": 1200
-};
+// SFRPG.shieldsPower = {
+//     "10": 20,
+//     "20": 40,
+//     "30": 60,
+//     "40": 80,
+//     "50": 100,
+//     "60": 120,
+//     "70": 140,
+//     "80": 160,
+//     "90": 180,
+//     "100": 200,
+//     "120": 240,
+//     "140": 280,
+//     "160": 320,
+//     "200": 400,
+//     "240": 480,
+//     "280": 560,
+//     "320": 640,
+//     "360": 720,
+//     "420": 840,
+//     "480": 960,
+//     "540": 1080,
+//     "600": 1200
+// };

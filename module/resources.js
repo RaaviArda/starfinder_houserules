@@ -81,10 +81,10 @@ class Resources extends Application {
         for (let prop in localData.starshipResources) {
             let element = document.getElementById("resources-" + prop);
             if (localData.starshipResources[prop].max <= 0) {
-                element.innerHTML = localData.starshipResources[prop].value + " " + element.dataset.resunit;
+                element.innerHTML = parseInt(localData.starshipResources[prop].value).toLocaleString('ru-RU') + " " + element.dataset.resunit;
             } else {
-                element.innerHTML = localData.starshipResources[prop].value + " " + element.dataset.resunit + " / " +
-                    localData.starshipResources[prop].max + " " + element.dataset.resunit;
+                element.innerHTML = parseInt(localData.starshipResources[prop].value).toLocaleString('ru-RU') + " " + element.dataset.resunit + " / " +
+                    parseInt(localData.starshipResources[prop].max).toLocaleString('ru-RU') + " " + element.dataset.resunit;
             }
         }
     }
