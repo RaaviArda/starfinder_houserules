@@ -1,5 +1,5 @@
-const DEFAULT = {};
-DEFAULT.starmapSystems = [
+const DEFAULT_SFRPG = {};
+DEFAULT_SFRPG.starmapSystems = [
     {id: 0, name: "TX-S9IY", type: 1, radius: 20.8, temperature: 12100, owner: 0, contestant: 0, known: 2, flags: "", cx: 183, cy: 244, conn: [1], population: 0, planets: 1, gmNotes: ""},
     {id: 1, name: "77-UX9", type: 6, radius: 0.6, temperature: 1100, owner: 0, contestant: 0, known: 2, flags: "", cx: 190, cy: 295, conn: [0,2], population: 0, planets: 4, gmNotes: ""},
     {id: 2, name: "CIDK-TD0Y", type: 5, radius: 1.1, temperature: 4100, owner: 0, contestant: 0, known: 2, flags: "", cx: 221, cy: 346, conn: [1,3], population: 0, planets: 5, gmNotes: ""},
@@ -103,7 +103,7 @@ DEFAULT.starmapSystems = [
     {id: 100, name: "J157121", type: 6, radius: 0.47, temperature: 1700, owner: 0, contestant: 0, known: 0, flags: "", cx: 0, cy: 0, conn: [], population: 0, planets: 1, gmNotes: ""}
 ];
 
-DEFAULT.starmapPlanets = [
+DEFAULT_SFRPG.starmapPlanets = [
     {planetId: 1, systemId: 0, name: "Asteroidy 1", type: 5, orbit: 5.9, cycle: 0.0, radius: 0.0, gravity: 0.0, atmosphere: 0, landable: 0, organics: 0, metals: 33, energy: 13, exotic: 0, specials: "Przepolowiona planeta", known: 2, gmNotes: ""},
     {planetId: 4, systemId: 1, name: "Planeta 1", type: 3, orbit: 3.6, cycle: 1.8, radius: 0.5, gravity: 0.6, atmosphere: 0, landable: 0, organics: 0, metals: 19, energy: 20, exotic: 0, specials: "", known: 2, gmNotes: ""},
     {planetId: 5, systemId: 1, name: "Planeta 2", type: 4, orbit: 13.0, cycle: 0.9, radius: 1.1, gravity: 1.0, atmosphere: 4, landable: 0, organics: 32, metals: 0, energy: 0, exotic: 24, specials: "Prymitywne zycie;Porzucona wioska", known: 2, gmNotes: ""},
@@ -266,7 +266,7 @@ DEFAULT.starmapPlanets = [
     {planetId: 162, systemId: 94, name: "OL-XGZ 1", type: 5, orbit: 21.1, cycle: 0.0, radius: 0.0, gravity: 0.0, atmosphere: 0, landable: 0, organics: 0, metals: 169, energy: 0, exotic: 0, specials: "Przepolowiona planeta", known: 1, gmNotes: ""}
 ];
 
-DEFAULT.starmapConnections = [
+DEFAULT_SFRPG.starmapConnections = [
     {connId: 1, sys1: 0, sys1cx: 183, sys1cy: 244, sys2: 1, sys2cx: 190, sys2cy: 295, known: false},
     {connId: 2, sys1: 1, sys1cx: 190, sys1cy: 295, sys2: 2, sys2cx: 221, sys2cy: 346, known: false},
     {connId: 3, sys1: 2, sys1cx: 221, sys1cy: 346, sys2: 3, sys2cx: 276, sys2cy: 383, known: false},
@@ -371,36 +371,17 @@ DEFAULT.starmapConnections = [
     {connId: 152, sys1: 5, sys1cx: 464, sys1cy: 413, sys2: 53, sys2cx: 591, sys2cy: 416, known: false}
 ];
 
-DEFAULT.jumpCost = 10;
-DEFAULT.currentSystem = {id: 0, cx: 183, cy: 244, owner: 0};
-DEFAULT.starshipResources = {
-    credits: {value: 0, max: 0},
-    mcredits: {value: 0, max: 0},
-    cap: {value: 0, max: 0},
-    fuel: {value: 0, max: 0},
-    org: {value: 0, max: 0},
-    met: {value: 0, max: 0},
-    ene: {value: 0, max: 0},
-    exo: {value: 0, max: 0},
-    probes: {value: 0, max: 0},
-    food: {value: 0, max: 0}
-};
-DEFAULT.jumpRange = 6;
-DEFAULT.calendarDate = "2185-05-04T22:00:00Z";
-DEFAULT.fuelPerHour = 1;
-DEFAULT.foodPerDay = 5;
+DEFAULT_SFRPG.jumpCost = 10;
+DEFAULT_SFRPG.currentSystem = {id: 0, cx: 183, cy: 244, owner: 0};
+DEFAULT_SFRPG.jumpRange = 6;
 
 const settingsToRegister = [
-    { setting: "starmapSystems", type: Object, default: DEFAULT.starmapSystems },
-    { setting: "starmapPlanets", type: Object, default: DEFAULT.starmapPlanets },
-    { setting: "starmapConnections", type: Object, default: DEFAULT.starmapConnections },
-    { setting: "jumpCost", type: Number, default: DEFAULT.jumpCost },
-    { setting: "currentSystem", type: Object, default: DEFAULT.currentSystem },
-    { setting: "starshipResources", type: Object, default: DEFAULT.starshipResources },
-    { setting: "jumpRange", type: Number, default: DEFAULT.jumpRange },
-    { setting: "calendarDate", type: String, default: DEFAULT.calendarDate },
-    { setting: "fuelPerHour", type: Number, default: DEFAULT.fuelPerHour },
-    { setting: "foodPerDay", type: Number, default: DEFAULT.foodPerDay }
+    { setting: "starmapSystems", type: Object, default: DEFAULT_SFRPG.starmapSystems, config: false },
+    { setting: "starmapPlanets", type: Object, default: DEFAULT_SFRPG.starmapPlanets, config: false },
+    { setting: "starmapConnections", type: Object, default: DEFAULT_SFRPG.starmapConnections, config: false },
+    { setting: "jumpCost", type: Number, default: DEFAULT_SFRPG.jumpCost, config: true },
+    { setting: "currentSystem", type: Object, default: DEFAULT_SFRPG.currentSystem, config: false },
+    { setting: "jumpRange", type: Number, default: DEFAULT_SFRPG.jumpRange, config: true }
 ];
 
 const HRTABLES = {};

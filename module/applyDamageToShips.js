@@ -43,7 +43,7 @@ async function applyShipDamage(roll, shMult, hullMult) {
 
         let a = t.actor,
             hp = a.data.data.attributes.hp,
-            sp = a.data.data.attributes.shields.forward,
+            sp = a.data.data.quadrants.forward.shields,
             dt = a.data.data.attributes.damageThreshold.value;
 
         let hpd = hp.value;
@@ -67,7 +67,7 @@ async function applyShipDamage(roll, shMult, hullMult) {
 
         promises.push(t.actor.update({
             "data.attributes.hp.value": hpd,
-            "data.attributes.shields.forward.value": spd
+            "data.quadrants.forward.shields.value": spd
         }));
     }
 

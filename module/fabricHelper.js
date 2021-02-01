@@ -13,11 +13,11 @@ function generateCanvasContents() {
     starMapCreditCost.fill = '#00FF00';
     starMapCanvas.add(starMapCreditCost);
 
-    let shiplineX = makeLine([localData.currentSystem.cx, 0, localData.currentSystem.cx, 828], '#FF0000');
+    let shiplineX = makeLine([localDataSFRPG.currentSystem.cx, 0, localDataSFRPG.currentSystem.cx, 828], '#FF0000');
     shiplineX.stroke = '#FF0000';
     shiplineX.strokeWidth = 1;
     starMapCanvas.add(shiplineX);
-    let shiplineY = makeLine([0, localData.currentSystem.cy, 1080, localData.currentSystem.cy], '#FF0000');
+    let shiplineY = makeLine([0, localDataSFRPG.currentSystem.cy, 1080, localDataSFRPG.currentSystem.cy], '#FF0000');
     shiplineY.stroke = '#FF0000';
     shiplineY.strokeWidth = 1;
     starMapCanvas.add(shiplineY);
